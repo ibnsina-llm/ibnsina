@@ -1,0 +1,228 @@
+{
+ "_policy": "train_v1_open = Apache-2.0 open weights. Included: public-domain, permissive and share-alike sources. Curated material without an explicit open licence (official school textbooks, curator-provided volumes) and one research-use parallel corpus (OPUS OpenSubtitles) were admitted per source by curator decision on 2026-08-28 and are recorded as such; NC/ND-licensed sources were excluded. No source text is redistributed.",
+ "_classes": [
+  "public-domain",
+  "permissive",
+  "share-alike",
+  "nc",
+  "nd",
+  "research-only",
+  "proprietary",
+  "eval-only"
+ ],
+ "culturax_fa": {
+  "license": "mC4 (ODC-BY) + OSCAR (CC0) via uonlp/CulturaX",
+  "class": "permissive",
+  "train_v1_open": true
+ },
+ "mc4_fa": {
+  "license": "ODC-BY 1.0",
+  "class": "permissive",
+  "train_v1_open": true
+ },
+ "fineweb2_fa": {
+  "license": "ODC-By 1.0",
+  "class": "permissive",
+  "train_v1_open": true
+ },
+ "fineweb_edu": {
+  "license": "ODC-By 1.0",
+  "class": "permissive",
+  "train_v1_open": true
+ },
+ "open_web_math": {
+  "license": "ODC-By 1.0",
+  "class": "permissive",
+  "train_v1_open": true
+ },
+ "pes2o": {
+  "license": "ODC-By 1.0",
+  "class": "permissive",
+  "train_v1_open": true,
+  "note": "not in v1 mix by default (English edu already covered)"
+ },
+ "starcoder_ts": {
+  "license": "per-file permissive (The Stack v1 dedup, opt-outs honoured)",
+  "class": "permissive",
+  "train_v1_open": true
+ },
+ "starcoder_py": {
+  "license": "per-file permissive (The Stack v1 dedup, opt-outs honoured)",
+  "class": "permissive",
+  "train_v1_open": true
+ },
+ "codeparrot_py": {
+  "license": "per-file GitHub licenses",
+  "class": "permissive",
+  "train_v1_open": false,
+  "note": "dropped by curator: redundant with starcoder_py, dedup noise"
+ },
+ "gh_repos": {
+  "license": "MIT / Apache-2.0 per repo",
+  "class": "permissive",
+  "train_v1_open": true
+ },
+ "gh_persian_nlp": {
+  "license": "per-repo (GitHub topic persian-nlp); unlicensed repos possible",
+  "class": "permissive",
+  "train_v1_open": true,
+  "note": "filter to repos with an OSI license file in Phase 3 if feasible"
+ },
+ "stackoverflow": {
+  "license": "CC-BY-SA 4.0",
+  "class": "share-alike",
+  "train_v1_open": true,
+  "note": "attribution required; SA applies to redistributed text, weights position contested"
+ },
+ "enwiki": {
+  "license": "CC-BY-SA 4.0 / GFDL",
+  "class": "share-alike",
+  "train_v1_open": true,
+  "epochs": "1-2"
+ },
+ "fawiki": {
+  "license": "CC-BY-SA 4.0 / GFDL",
+  "class": "share-alike",
+  "train_v1_open": true,
+  "epochs": 4
+ },
+ "fawikisource": {
+  "license": "texts public domain; CC-BY-SA wrapper",
+  "class": "public-domain",
+  "train_v1_open": true
+ },
+ "poems": {
+  "license": "classical poems public domain (Ganjoor-derived)",
+  "class": "public-domain",
+  "train_v1_open": true
+ },
+ "ganjoor": {
+  "license": "classical poems public domain; site metadata per ganjoor.net",
+  "class": "public-domain",
+  "train_v1_open": true
+ },
+ "history": {
+  "license": "curator-provided PDF (navy history); curator confirmed 2026-08-28",
+  "class": "proprietary",
+  "train_v1_open": true,
+  "note": "curator-approved"
+ },
+ "en_books": {
+  "license": "Project Gutenberg / pre-1929 scans",
+  "class": "public-domain",
+  "train_v1_open": true
+ },
+ "chap_textbooks": {
+  "license": "chap.sch.ir official textbooks, no terms page",
+  "class": "proprietary",
+  "train_v1_open": true,
+  "note": "curator-approved 2026-08-28: government textbooks, declared math/edu backbone"
+ },
+ "konkur": {
+  "license": "Kanoon exam booklets, proprietary",
+  "class": "proprietary",
+  "train_v1_open": false,
+  "note": "dropped by curator for Apache-2.0 release"
+ },
+ "konkur_answers": {
+  "license": "Kanoon answer booklets, proprietary",
+  "class": "proprietary",
+  "train_v1_open": false,
+  "note": "dropped by curator"
+ },
+ "openstax": {
+  "license": "CC-BY 4.0 (most titles); a few CC-BY-NC-SA",
+  "class": "permissive",
+  "train_v1_open": true,
+  "note": "check per-title license from curated/harvest/openstax/manifest.json in Phase 3; drop NC titles"
+ },
+ "ncert": {
+  "license": "NCERT, non-commercial educational",
+  "class": "nc",
+  "train_v1_open": false,
+  "note": "dropped by curator"
+ },
+ "opus_ted2020": {
+  "license": "CC-BY-NC-ND 4.0",
+  "class": "nd",
+  "train_v1_open": false,
+  "note": "dropped by curator"
+ },
+ "opus_mizan": {
+  "license": "non-commercial",
+  "class": "nc",
+  "train_v1_open": false,
+  "note": "dropped by curator"
+ },
+ "opus_opensubtitles": {
+  "license": "OPUS OpenSubtitles: per-subtitle, research use",
+  "class": "research-only",
+  "train_v1_open": true,
+  "note": "KEPT by curator decision 2026-08-28 with this manifest note: OPUS redistribution, subtitle authorship diffuse; revisit if a rightsholder objects"
+ },
+ "opus_ccmatrix": {
+  "license": "various (CCNet web crawl)",
+  "class": "permissive",
+  "train_v1_open": true
+ },
+ "opus_ccaligned": {
+  "license": "various (web-captured)",
+  "class": "permissive",
+  "train_v1_open": true
+ },
+ "opus_hplt": {
+  "license": "CC0",
+  "class": "public-domain",
+  "train_v1_open": true
+ },
+ "opus_xlent": {
+  "license": "CC-BY-SA 3.0",
+  "class": "share-alike",
+  "train_v1_open": true
+ },
+ "opus_wikimatrix": {
+  "license": "CC-BY-SA 4.0",
+  "class": "share-alike",
+  "train_v1_open": true
+ },
+ "opus_globalvoices": {
+  "license": "CC-BY 3.0",
+  "class": "permissive",
+  "train_v1_open": true
+ },
+ "opus_tep": {
+  "license": "see OPUS page (TEP: research)",
+  "class": "research-only",
+  "train_v1_open": false,
+  "note": "excluded pending license check"
+ },
+ "opus100": {
+  "license": "CC-BY 2.0",
+  "class": "permissive",
+  "train_v1_open": true
+ },
+ "flores200": {
+  "license": "CC-BY-SA 4.0",
+  "class": "eval-only",
+  "train_v1_open": false,
+  "note": "benchmark — never train on it"
+ },
+ "matina": {
+  "license": "CC-BY-NC-ND 4.0 (gated manual)",
+  "class": "nd",
+  "train_v1_open": false,
+  "note": "excluded; joins a later research/3B mix only with written permission from MatinaAI"
+ },
+ "chap_catalog": {
+  "license": "chap.sch.ir official textbooks, no terms page",
+  "class": "proprietary",
+  "train_v1_open": true,
+  "note": "curator-approved (same as chap_textbooks); general-education grades 1-12 + pre-university, 1404-1405"
+ },
+ "synth_v1": {
+  "class": "permissive",
+  "license": "Apache-2.0",
+  "train_v1_open": true,
+  "note": "our own synthetic Persian corpus (synth_v1): teacher-generated, judge-filtered top-third, MinHash-deduped, decontaminated vs 5 eval sets; released recipe in synth_v1/"
+ }
+}

@@ -1,0 +1,223 @@
+# synth_v1 — synthetic Persian pretraining corpus for IbnSina (the recipe is publishable; data license Apache-2.0).
+# Method: GENERATE in Persian, never translate. English seed topics anchor coverage (knowledge is densest in
+# English); one real scored Persian passage per prompt anchors the register. Literal/faithful rendering is allowed
+# only where exact fidelity matters (canonical proofs, precise definitions), labelled in meta, a clear minority.
+version: 1
+status: SY-B   # SY-A approved with re-scope (Sina, 2026-08-31): 3-5B kept tokens; run to STOP SY-B at ~1B kept
+output: ${CORPUS_BUCKET:-gs://YOUR-BUCKET}/synth_v1/
+license: Apache-2.0
+format: pretraining shards (parquet, text + meta) + manifest, same layout conventions as train_v1
+
+targets:
+  total_tokens_billions: [3, 5]   # re-scoped at SY-A (was 40-60B; see budget note)
+  syb_stop_kept_tokens: 1.0e9      # STOP SY-B: pause + report at ~1B kept tokens
+  tokens_per_doc: {min: 800, max: 2500, sample_grid: [900, 1400, 2000, 2500]}
+
+budget_ladder:
+  mandate_estimate_usd: [8000, 15000]   # Sina's estimate for 40-60B tokens
+  notify_every_usd: 5000                # notify Sina at each $5k of cumulative spend
+  hard_stop_usd: 20000                  # absolute stop, no exceptions
+  pilot_cap_usd: 20
+  note: >
+    SY-A measured (pilot, usage metadata): with batch -50%, gen+judge at 3x oversample is ~$5.7k/B (all-lite)
+    to ~$7.6k/B (all-flash); the approved routing weighs to ~$6.4k/B, so ~1B kept lands ~$6-7k (crosses the
+    first $5k notify) and the full 3-5B target is resolved at STOP SY-B against the $20k hard stop.
+
+teachers:
+  primary: {model: gemini-3.7-flash,      via: vertex, location: global, temperature: 0.9, thinking_budget: 0}
+  bulk:    {model: gemini-3.5-flash-lite, via: vertex, location: global, temperature: 0.9}
+  routing:   # SY-A ruling 2026-08-31: quality-critical domains on Flash, the rest on Flash-Lite via batch
+    medicine_science: gemini-3.7-flash
+    reasoning_cot: gemini-3.7-flash
+    default: gemini-3.5-flash-lite
+    mode: vertex batch (-50%) wherever available, online fallback; judge always gemini-3.7-flash
+    note: routing is by domain per the ruling; SY-B reviews keep-rate by doc_type x teacher (pilot flagged lite on worked_problems)
+  verified_live: 2026-08-31   # both ids answered a generate call from the pipeline VM; location="global" (Gemini 3.x is global-only); gemini-3.7-flash-lite does NOT exist (404)
+  prices_usd_per_M_tokens: {gemini-3.7-flash: [0.75, 3.75], gemini-3.5-flash-lite: [0.30, 2.50]}
+  price_notes: >
+    gemini-3.7-flash is intro-priced through 2026-12-31 and doubles to 1.50/7.50 on 2027-01-01;
+    Vertex batch mode is -50% on both models. Both matter for the bulk run economics.
+
+generation:
+  oversample: 3                    # candidates per kept doc; judge scores EVERY candidate (no sampling shortcuts); keep the top third
+  language: fa                     # generated directly in Persian
+  seed_topics: en                  # topic inventories are English, teacher-expanded, never scraped
+  style_anchor: one real Persian passage (500-1500 chars, educational register, edu_score >= 3.0) per prompt; register-only imitation, content reuse forbidden
+  translation_exception: canonical proofs and precise definitions may be rendered faithfully from standard formulations; labelled mode=faithful in meta; must stay under 10% of tokens
+  aspect_axis:   # sampled per doc and appended to the prompt's {EXTRA} — multiplies diversity beyond topics
+    - "تمرکز بر شهود و مثال‌های ملموس"
+    - "تمرکز بر اشتباه‌های رایج و رفع آن‌ها"
+    - "تمرکز بر اشتقاق و اثبات دقیق"
+    - "تمرکز بر کاربردهای عملی"
+    - "تمرکز بر مقایسه با مفاهیم مجاور و مرزبندی دقیق"
+    - "تمرکز بر تصویر کلی و جایگاه موضوع در رشته"
+    - "تمرکز بر جزئیات کمی و محاسبات"
+    - "تمرکز بر پرسش‌های مفهومی که فهم را می‌سنجند"
+
+judge:
+  model: gemini-3.7-flash   # house calibration (sft_v2, 2026-08-29): Flash-Lite missed confidently-wrong math (scored 9 where Flash scored 1) -> judge on Flash, never Lite
+  temperature: 0.0
+  thinking_budget: 0        # SY-B calibration may enable thinking for worked_problems if error-catch rate demands it
+  scale: 0-10
+  criteria: [correctness, natural_persian, translationese_free, informational_density]
+  keep_fraction: 0.34       # top third at 3x oversample
+  keep_min: null            # threshold calibrated at STOP SY-B on pilot docs + human spot-check (like sft_v2 CALIBRATION.md)
+  auto_checks: [langid_fa, repetition_loop, length_sanity, no_teacher_self_reference, excluded_domain_keywords]
+
+dedup_decontamination:
+  minhash: same params as pipeline/p1_dedup.py (5-gram, 14x8 buckets, 64-bit)
+  decontaminate_against: [parsinlu, khayyam, persianmedqa, percor, taraz]
+  method: exact question match + normalized 13-gram overlap (sft_v2 house method; eval sets via sft_v2/fetch_evalsets.py patterns; persianmedqa test parquet already on the VM)
+
+subdomain_scoring_rubric:   # every subdomain below carries 1-5 scores on the four mandate criteria
+  universal: knowledge identical across countries
+  dense_en: dense, high-quality English source material exists
+  scarce_fa: scarce in native Persian text (higher = scarcer = more valuable to synthesize)
+  non_political: free of jurisdiction-bound or contested content
+
+excluded_domains: [law, tax, civics, history, politics, religion, current events, business practice, social norms,
+                   health policy, country-specific medical practice, national codes and standards,
+                   anything jurisdiction-bound or contested]
+
+doc_types:   # shared definitions; the Persian note is injected into the generation prompt as {DOC_TYPE_NOTE}
+  explainer_article: "مقالهٔ آموزشی پیوسته با زیرعنوان‌های Markdown؛ از تعریف و شهود شروع کن، با مثال مشخص جلو برو، با جمع‌بندی کوتاه تمام کن (رجیستر FineWeb-Edu: توضیح روشن، بدون حاشیه)"
+  lecture_notes: "جزوهٔ درسی: تعریف‌های دقیق، نکته‌های کلیدی، یک-دو مثال کوتاه حل‌شده، فهرست‌وار ولی با جمله‌های کامل؛ در پایان «نکته‌های مهم»"
+  worked_problems: "۳ تا ۶ مسئله در همان موضوع؛ برای هر مسئله: صورت مسئله، حل گام‌به‌گام (هر گام یک کار مشخص با محاسبهٔ درست)، و خط جدای «جواب: …»؛ سطح مسئله‌ها از ساده به سخت"
+  qa: "۵ تا ۱۰ پرسش و پاسخ در همان موضوع (### پرسش / پاسخ)؛ پرسش‌های واقعی و مفهومی، نه بازنویسی هم؛ پاسخ‌ها ۲ تا ۶ جمله، دقیق"
+  glossary: "۱۰ تا ۲۰ مدخل واژه‌نامه: «**اصطلاح فارسی** (English term): تعریف ۲-۳ جمله‌ای دقیق»؛ اصطلاح‌های واقعاً مهم همان موضوع، مرتب از پایه به پیشرفته"
+
+domains:
+  # ---- biggest slice: STEM foundations ----
+  - name: stem_foundations
+    weight: 0.40
+    audience_fa: "دانش‌آموز سال‌های آخر دبیرستان تا دانشجوی کارشناسی"
+    doc_type_mix: {explainer_article: 0.35, lecture_notes: 0.20, worked_problems: 0.25, qa: 0.12, glossary: 0.08}
+    subdomains:
+      - name: mathematics
+        weight: 0.25
+        scores: {universal: 5, dense_en: 5, scarce_fa: 4, non_political: 5}
+        seed_topic_strategy: "teacher-expanded tables of contents of standard texts (calculus, linear algebra, undergrad probability/statistics, discrete math) + high-school curriculum topic lists"
+      - name: physics
+        weight: 0.20
+        scores: {universal: 5, dense_en: 5, scarce_fa: 4, non_political: 5}
+        seed_topic_strategy: "teacher-expanded intro-physics sequence TOCs (mechanics, E&M, thermo, waves/optics, modern physics) + arXiv physics.ed-ph style topic lists"
+      - name: chemistry
+        weight: 0.15
+        scores: {universal: 5, dense_en: 5, scarce_fa: 4, non_political: 5}
+        seed_topic_strategy: "teacher-expanded general/organic/physical/analytical chemistry course outlines"
+      - name: biology
+        weight: 0.15
+        scores: {universal: 5, dense_en: 5, scarce_fa: 4, non_political: 4}
+        seed_topic_strategy: "teacher-expanded cell/molecular biology, genetics, evolution, microbiology, ecology-as-science course outlines"
+      - name: cs_programming
+        weight: 0.25
+        scores: {universal: 5, dense_en: 5, scarce_fa: 3, non_political: 5}
+        seed_topic_strategy: "teacher-expanded CS curriculum lists (algorithms, data structures, Python, databases, networks, OS) + classic textbook TOCs; code examples in Python with Persian prose"
+  # ---- medicine, science half only ----
+  - name: medicine_science
+    weight: 0.16
+    audience_fa: "دانشجوی پزشکی و پیراپزشکی در سال‌های علوم پایه"
+    doc_type_mix: {explainer_article: 0.40, lecture_notes: 0.25, qa: 0.20, glossary: 0.15}
+    gen_extra_fa: "فقط علوم پایهٔ پزشکی (مکانیسم‌ها و ساختارها): بدون توصیهٔ بالینی، بدون دوز و پروتکل کشوری، بدون نام تجاری دارو، بدون سیاست سلامت."
+    subdomains:
+      - name: anatomy
+        weight: 0.22
+        scores: {universal: 5, dense_en: 5, scarce_fa: 5, non_political: 5}
+        seed_topic_strategy: "teacher-expanded regional + systemic anatomy syllabus (standard atlas/course structure)"
+      - name: physiology
+        weight: 0.26
+        scores: {universal: 5, dense_en: 5, scarce_fa: 5, non_political: 5}
+        seed_topic_strategy: "teacher-expanded organ-system physiology course outline (cardio, renal, respiratory, neuro, endocrine, GI)"
+      - name: pharmacology
+        weight: 0.22
+        scores: {universal: 5, dense_en: 5, scarce_fa: 5, non_political: 4}
+        seed_topic_strategy: "teacher-expanded drug-class mechanism outline (receptor pharmacology, PK/PD principles, major classes by system) — mechanisms only, no dosing guidelines"
+      - name: pathology
+        weight: 0.18
+        scores: {universal: 5, dense_en: 5, scarce_fa: 5, non_political: 5}
+        seed_topic_strategy: "teacher-expanded general + systemic pathology course outline (cell injury, inflammation, neoplasia, per-organ pathology)"
+      - name: biochem_micro_immuno
+        weight: 0.12
+        scores: {universal: 5, dense_en: 5, scarce_fa: 5, non_political: 5}
+        seed_topic_strategy: "teacher-expanded medical biochemistry, microbiology and immunology course outlines"
+  # ---- engineering & applied science ----
+  - name: engineering_applied
+    weight: 0.14
+    audience_fa: "دانشجوی مهندسی"
+    doc_type_mix: {explainer_article: 0.35, lecture_notes: 0.25, worked_problems: 0.20, qa: 0.10, glossary: 0.10}
+    gen_extra_fa: "فقط اصول جهانی مهندسی؛ آیین‌نامه‌ها و استانداردهای ملی (هر کشوری) ممنوع."
+    subdomains:
+      - name: electrical_electronics
+        weight: 0.25
+        scores: {universal: 5, dense_en: 5, scarce_fa: 4, non_political: 5}
+        seed_topic_strategy: "teacher-expanded circuits/electronics/signals course TOCs"
+      - name: mechanical
+        weight: 0.22
+        scores: {universal: 5, dense_en: 5, scarce_fa: 4, non_political: 5}
+        seed_topic_strategy: "teacher-expanded statics/dynamics/thermo/fluids/machine-design course TOCs"
+      - name: civil_materials
+        weight: 0.18
+        scores: {universal: 4, dense_en: 5, scarce_fa: 4, non_political: 4}
+        seed_topic_strategy: "teacher-expanded mechanics-of-materials, structural analysis and materials-science outlines (universal mechanics only, no building codes)"
+      - name: chemical_process
+        weight: 0.15
+        scores: {universal: 5, dense_en: 5, scarce_fa: 5, non_political: 5}
+        seed_topic_strategy: "teacher-expanded mass/energy balance, transport phenomena, unit operations outlines"
+      - name: computer_engineering
+        weight: 0.20
+        scores: {universal: 5, dense_en: 5, scarce_fa: 4, non_political: 5}
+        seed_topic_strategy: "teacher-expanded computer architecture, embedded systems, digital logic, signal processing outlines"
+  # ---- academic explainer prose (FineWeb-Edu register) ----
+  - name: academic_explainer
+    weight: 0.13
+    audience_fa: "خوانندهٔ کنجکاو با سواد دبیرستانی به بالا"
+    doc_type_mix: {explainer_article: 0.60, lecture_notes: 0.15, qa: 0.15, glossary: 0.10}
+    subdomains:
+      - name: earth_space_science
+        weight: 0.25
+        scores: {universal: 5, dense_en: 5, scarce_fa: 4, non_political: 5}
+        seed_topic_strategy: "teacher-expanded geology, meteorology, oceanography, astronomy topic inventories (intro-course TOCs + observatory outreach topic lists)"
+      - name: neuroscience_cognition
+        weight: 0.20
+        scores: {universal: 5, dense_en: 5, scarce_fa: 5, non_political: 5}
+        seed_topic_strategy: "teacher-expanded cognitive science / neuroscience intro outlines (perception, memory, learning, neural basis) — science only, no clinical or self-help advice"
+      - name: statistics_data_literacy
+        weight: 0.20
+        scores: {universal: 5, dense_en: 5, scarce_fa: 4, non_political: 5}
+        seed_topic_strategy: "teacher-expanded applied statistics, experimental design and data-literacy topic lists (biases, distributions, inference, visualization pitfalls)"
+      - name: linguistics_science
+        weight: 0.10
+        scores: {universal: 4, dense_en: 5, scarce_fa: 4, non_political: 4}
+        seed_topic_strategy: "teacher-expanded general-linguistics outlines (phonetics, morphology, syntax, semantics as science; language-neutral examples plus Persian ones where natural)"
+      - name: how_things_work
+        weight: 0.25
+        scores: {universal: 5, dense_en: 5, scarce_fa: 4, non_political: 5}
+        seed_topic_strategy: "teacher-expanded technology-explainer inventories (engines, semiconductors, internet protocols, batteries, aircraft, cameras — the mechanism, not the market)"
+  # ---- reasoning / chain-of-thought in Persian ----
+  - name: reasoning_cot
+    weight: 0.17
+    audience_fa: "دانش‌آموز و دانشجوی در حال تمرین حل مسئله"
+    doc_type_mix: {worked_problems: 0.85, qa: 0.15}
+    gen_extra_fa: "هر مسئله باید جواب نهایی قابل‌راستی‌آزمایی (عدد، عبارت بستهٔ کوتاه یا گزینه) در خط جدای «جواب: …» داشته باشد. همهٔ محاسبات را پیش از نوشتن دوباره خودت چک کن؛ یک جواب غلط کل سند را بی‌ارزش می‌کند."
+    verification: "final answers machine-checkable where possible (numeric compare / symbolic normalize); a verifier pass over «جواب:» lines is part of the full pipeline"
+    subdomains:
+      - name: math_problem_solving
+        weight: 0.35
+        scores: {universal: 5, dense_en: 5, scarce_fa: 5, non_political: 5}
+        seed_topic_strategy: "teacher-expanded problem-type inventories per math topic (arithmetic through olympiad-lite), GSM8K/MATH-style categories rebuilt from scratch, never copied"
+      - name: physics_problems
+        weight: 0.25
+        scores: {universal: 5, dense_en: 5, scarce_fa: 5, non_political: 5}
+        seed_topic_strategy: "teacher-expanded end-of-chapter problem-type lists for intro physics"
+      - name: chemistry_problems
+        weight: 0.15
+        scores: {universal: 5, dense_en: 5, scarce_fa: 5, non_political: 5}
+        seed_topic_strategy: "teacher-expanded stoichiometry, equilibrium, gas-law, solution-chemistry problem-type lists"
+      - name: cs_algorithm_traces
+        weight: 0.15
+        scores: {universal: 5, dense_en: 5, scarce_fa: 4, non_political: 5}
+        seed_topic_strategy: "teacher-expanded dry-run/trace exercises (what does this code print, complexity analysis, algorithm state tables) with exact verifiable outputs"
+      - name: logic_puzzles
+        weight: 0.10
+        scores: {universal: 5, dense_en: 4, scarce_fa: 4, non_political: 5}
+        seed_topic_strategy: "teacher-expanded constraint/deduction puzzle families with unique checkable answers (no cultural references)"

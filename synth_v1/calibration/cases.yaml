@@ -1,0 +1,281 @@
+# synth_v1 judge calibration — planted-flaw cases (SY-B). Same approach as sft_v2 CALIBRATION.md:
+# run the real judge over documents whose defects we know, check it lands in the expected band.
+# Case 01 reproduces the SY-A pilot escape: a real anatomy label slip (Teres major glossed as «ترس مینور»)
+# was scored 8 by the judge — we want subtle-but-real factual label errors capped at 6.
+# expect: overall_max / overall_min bound the judge's overall score; criterion bounds optional.
+cases:
+  - id: med_label_slip
+    domain: medicine_science
+    subdomain: anatomy
+    doc_type: explainer_article
+    topic: walls of the axilla
+    flaw: "subtle label slip: Teres major glossed as «ترس مینور» (from pilot doc that escaped with 8)"
+    expect: {overall_max: 6, correctness_max: 6}
+    text: |
+      # دیواره‌های ناحیهٔ زیربغل
+      ناحیهٔ زیربغل (Axilla) فضایی هرمی‌شکل میان قفسهٔ سینه و بازوست که مسیر عبور عناصر عصبی-عروقی اندام فوقانی است. دیوارهٔ قدامی آن را ماهیچه‌های پکتورال بزرگ و کوچک (Pectoralis major and minor) می‌سازند. دیوارهٔ خلفی توسط ماهیچه‌های ساب‌اسکاپولاریس (Subscapularis)، ترس مینور (Teres major) و لاتیسیموس دورسی (Latissimus dorsi) محدود می‌شود. دیوارهٔ داخلی را دنده‌های اول تا چهارم و ماهیچهٔ سراتوس قدامی تشکیل می‌دهند و دیوارهٔ خارجی، ناودان بین‌برجستگی استخوان بازوست. شناخت این مرزها برای فهم مسیر شریان زیربغلی و طناب‌های شبکهٔ بازویی ضروری است.
+  - id: math_wrong_final
+    domain: reasoning_cot
+    subdomain: math_problem_solving
+    doc_type: worked_problems
+    topic: percent problems
+    flaw: "wrong final answer stated confidently (15% of 240 = 38)"
+    expect: {overall_max: 2}
+    text: |
+      # محاسبهٔ درصد
+      ### مسئله
+      15 درصد عدد 240 را به دست آورید.
+      **گام 1:** درصد را به کسر تبدیل می‌کنیم: $15\% = \frac{15}{100} = 0.15$.
+      **گام 2:** ضرب می‌کنیم: $0.15 \times 240 = 38$.
+      جواب: 38
+  - id: math_wrong_step_right_answer
+    domain: reasoning_cot
+    subdomain: math_problem_solving
+    doc_type: worked_problems
+    topic: multiplication strategies
+    flaw: "wrong intermediate step (7×10=75) but correct final answer 91"
+    expect: {overall_max: 5}
+    text: |
+      # ضرب ذهنی
+      ### مسئله
+      حاصل $7 \times 13$ را با تجزیه به دست آورید.
+      **گام 1:** عدد 13 را تجزیه می‌کنیم: $13 = 10 + 3$.
+      **گام 2:** $7 \times 10 = 75$.
+      **گام 3:** $7 \times 3 = 21$.
+      **گام 4:** جمع می‌کنیم: $70 + 21 = 91$.
+      جواب: 91
+  - id: physics_false_fact
+    domain: stem_foundations
+    subdomain: physics
+    doc_type: explainer_article
+    topic: speed of light in media
+    flaw: "confident false claim: light travels faster in water than vacuum"
+    expect: {overall_max: 2}
+    text: |
+      # سرعت نور در محیط‌های مختلف
+      سرعت نور در خلأ حدود 300 هزار کیلومتر بر ثانیه است. وقتی نور وارد محیطی مادی مانند آب می‌شود، برهم‌کنش با مولکول‌ها باعث می‌شود سرعت آن از سرعتش در خلأ بیشتر شود؛ به همین دلیل ضریب شکست آب از یک بزرگ‌تر است. این افزایش سرعت، علت اصلی شکست نور در مرز دو محیط است و در طراحی عدسی‌ها از همین خاصیت استفاده می‌شود.
+  - id: unit_confusion
+    domain: engineering_applied
+    subdomain: electrical_electronics
+    doc_type: worked_problems
+    topic: electric energy billing
+    flaw: "kW/kWh confusion in the computation"
+    expect: {overall_max: 4}
+    text: |
+      # محاسبهٔ مصرف انرژی الکتریکی
+      ### مسئله
+      بخاری برقی 2 کیلووات، روزی 3 ساعت کار می‌کند. مصرف ماهانه (30 روز) چند کیلووات‌ساعت است؟
+      **گام 1:** توان مصرفی روزانه: $2 + 3 = 5$ کیلووات‌ساعت در روز.
+      **گام 2:** مصرف ماهانه: $5 \times 30 = 150$ کیلووات‌ساعت.
+      جواب: 150 کیلووات‌ساعت
+  - id: truncated_doc
+    domain: reasoning_cot
+    subdomain: physics_problems
+    doc_type: worked_problems
+    topic: free fall
+    flaw: "document cut mid-sentence in problem 2"
+    expect: {overall_max: 2}
+    text: |
+      # سقوط آزاد
+      ### مسئلهٔ 1
+      جسمی از ارتفاع 45 متری رها می‌شود ($g = 10$). زمان رسیدن به زمین؟
+      از رابطهٔ $h = \frac{1}{2}gt^2$: $45 = 5t^2$ پس $t^2 = 9$ و $t = 3$ ثانیه.
+      جواب: 3 ثانیه
+      ### مسئلهٔ 2
+      جسمی با سرعت اولیهٔ 20 متر بر ثانیه به بالا پرتاب می‌شود. بیشینهٔ ارتفاع برابر است با
+  - id: repetition_loop
+    domain: academic_explainer
+    subdomain: earth_space_science
+    doc_type: explainer_article
+    topic: water cycle
+    flaw: "same sentence repeated four times"
+    expect: {overall_max: 4}
+    text: |
+      # چرخهٔ آب
+      چرخهٔ آب فرایند جابه‌جایی پیوستهٔ آب میان اقیانوس، جو و خشکی است. تبخیر، آب را از سطح اقیانوس به جو می‌برد. تبخیر، آب را از سطح اقیانوس به جو می‌برد. تبخیر، آب را از سطح اقیانوس به جو می‌برد. تبخیر، آب را از سطح اقیانوس به جو می‌برد. سپس بخار آب متراکم می‌شود و ابر شکل می‌گیرد و بارش رخ می‌دهد.
+  - id: translationese_heavy
+    domain: academic_explainer
+    subdomain: how_things_work
+    doc_type: explainer_article
+    topic: how batteries work
+    flaw: "calque-ridden prose (بیایید نگاهی بیندازیم، نقش بازی می‌کند، این به شما کمک خواهد کرد)"
+    expect: {overall_max: 5, translationese_free_max: 4}
+    text: |
+      # باتری‌ها چگونه کار می‌کنند؟
+      بیایید نگاهی عمیق‌تر به دنیای شگفت‌انگیز باتری‌ها بیندازیم. این مقاله به شما کمک خواهد کرد تا درک بهتری به دست آورید. الکترولیت نقش بسیار مهمی را در انتقال یون‌ها بازی می‌کند. به عنوان یک نتیجه، الکترون‌ها از قطب منفی به سمت قطب مثبت جریان پیدا می‌کنند. در پایان روز، آنچه اهمیت دارد این است که واکنش‌های شیمیایی انرژی را آزاد می‌کنند. امیدواریم این توضیحات برای شما مفید بوده باشد.
+  - id: code_switch
+    domain: stem_foundations
+    subdomain: cs_programming
+    doc_type: explainer_article
+    topic: binary search
+    flaw: "an English sentence dropped mid-paragraph"
+    expect: {overall_max: 3}
+    text: |
+      # جست‌وجوی دودویی
+      جست‌وجوی دودویی (Binary search) روشی برای یافتن عنصر در آرایهٔ مرتب است. در هر گام، عنصر میانی بررسی می‌شود و نیمی از آرایه کنار گذاشته می‌شود. The algorithm keeps halving the search interval until the target is found. به همین دلیل پیچیدگی زمانی آن $O(\log n)$ است و برای آرایه‌های بزرگ بسیار کاراست.
+  - id: ai_self_reference
+    domain: academic_explainer
+    subdomain: statistics_data_literacy
+    doc_type: explainer_article
+    topic: sampling bias
+    flaw: "mentions being a language model"
+    expect: {overall_max: 2}
+    text: |
+      # سوگیری نمونه‌گیری
+      به عنوان یک مدل زبانی، توضیح می‌دهم که سوگیری نمونه‌گیری وقتی رخ می‌دهد که نمونهٔ انتخابی نمایندهٔ جامعه نباشد. اگر نظرسنجی فقط از کاربران اینترنت انجام شود، نتیجه دربارهٔ کل جامعه معتبر نیست. راه مقابله، نمونه‌گیری تصادفی و وزن‌دهی درست است.
+  - id: politics_drift
+    domain: stem_foundations
+    subdomain: physics
+    doc_type: explainer_article
+    topic: nuclear fission
+    flaw: "drifts from physics into a political stance (excluded domain)"
+    expect: {overall_max: 2}
+    text: |
+      # شکافت هسته‌ای
+      در شکافت هسته‌ای، هستهٔ سنگین مانند اورانیوم-235 پس از جذب نوترون به دو هستهٔ سبک‌تر شکافته می‌شود و انرژی آزاد می‌کند. این انرژی از تفاوت جرم بر پایهٔ رابطهٔ $E = mc^2$ می‌آید. به همین دلیل سیاست هسته‌ای برخی دولت‌ها کاملاً بر حق است و منتقدان آن اشتباه می‌کنند؛ هر کشوری باید بدون توجه به فشارهای خارجی این فناوری را توسعه دهد.
+  - id: fake_statistic
+    domain: academic_explainer
+    subdomain: neuroscience_cognition
+    doc_type: explainer_article
+    topic: sleep and memory
+    flaw: "invented precise citation/statistic"
+    expect: {overall_max: 4}
+    text: |
+      # خواب و تثبیت حافظه
+      خواب در تثبیت حافظه نقش دارد؛ در خواب عمیق، بازپخش الگوهای عصبی به انتقال اطلاعات از هیپوکامپ به قشر کمک می‌کند. طبق مطالعهٔ سال 2023 دانشگاه هاروارد، دقیقاً 73/4 درصد از خاطره‌های روزانه فقط در مرحلهٔ REM تثبیت می‌شوند و 26/6 درصد باقی‌مانده در خواب عمیق. کم‌خوابی مزمن، یادگیری و تمرکز را مختل می‌کند.
+  - id: wrong_formula
+    domain: stem_foundations
+    subdomain: mathematics
+    doc_type: lecture_notes
+    topic: circle area
+    flaw: "wrong formula: area = 2πr²"
+    expect: {overall_max: 2}
+    text: |
+      # مساحت و محیط دایره
+      **تعریف:** دایره مکان هندسی نقاطی است که از مرکز فاصلهٔ ثابت $r$ دارند.
+      **محیط:** $P = 2\pi r$.
+      **مساحت:** $S = 2\pi r^2$.
+      **مثال:** برای $r = 3$: محیط $6\pi$ و مساحت $18\pi$.
+      نکتهٔ مهم: واحد مساحت همیشه مربع واحد طول است.
+  - id: self_contradiction
+    domain: stem_foundations
+    subdomain: biology
+    doc_type: explainer_article
+    topic: mitochondria
+    flaw: "asserts mitochondria have their own DNA, later denies it"
+    expect: {overall_max: 4}
+    text: |
+      # میتوکندری، نیروگاه سلول
+      میتوکندری اندامکی دوغشایی است که با تنفس سلولی، ATP تولید می‌کند. میتوکندری DNA مخصوص به خود دارد که از مادر به ارث می‌رسد و پایهٔ نظریهٔ درون‌همزیستی است. چین‌خوردگی‌های غشای داخلی (کریستا) سطح واکنش‌ها را افزایش می‌دهند. از آنجا که میتوکندری هیچ مادهٔ ژنتیکی ندارد، همهٔ پروتئین‌هایش از هستهٔ سلول رمزگذاری می‌شود.
+  - id: filler_padding
+    domain: academic_explainer
+    subdomain: how_things_work
+    doc_type: explainer_article
+    topic: refrigeration
+    flaw: "vague generalities, near-zero informational content"
+    expect: {overall_max: 5, informational_density_max: 4}
+    text: |
+      # یخچال چگونه کار می‌کند؟
+      یخچال یکی از مهم‌ترین وسایل زندگی امروزی است و در همهٔ خانه‌ها پیدا می‌شود. کارکرد یخچال بسیار جالب است و اهمیت زیادی دارد. یخچال غذا را خنک نگه می‌دارد و این خنک نگه داشتن برای سلامت ما بسیار مهم است. فناوری یخچال در طول زمان پیشرفت زیادی کرده است و امروزه انواع مختلفی از یخچال‌ها وجود دارد. به طور کلی می‌توان گفت یخچال با استفاده از فرایندهای خاصی دما را پایین می‌آورد و همین موضوع باعث ماندگاری مواد غذایی می‌شود.
+  - id: chem_unbalanced
+    domain: stem_foundations
+    subdomain: chemistry
+    doc_type: lecture_notes
+    topic: balancing equations
+    flaw: "claims H2 + O2 -> H2O is balanced"
+    expect: {overall_max: 3}
+    text: |
+      # موازنهٔ معادله‌های شیمیایی
+      در واکنش شیمیایی، شمار اتم‌های هر عنصر در دو سو باید برابر باشد.
+      **مثال حل‌شده:** واکنش تشکیل آب: $H_2 + O_2 \rightarrow H_2O$. این معادله موازنه است، زیرا در هر دو سو هیدروژن و اکسیژن داریم.
+      **نکته:** ضرایب را تغییر می‌دهیم، نه زیروندها را.
+  - id: sign_error
+    domain: reasoning_cot
+    subdomain: math_problem_solving
+    doc_type: worked_problems
+    topic: linear equations
+    flaw: "sign error: x+5=3 -> x=2"
+    expect: {overall_max: 2}
+    text: |
+      # معادلهٔ خطی سادهٔ یک‌مجهولی
+      ### مسئله
+      معادلهٔ $x + 5 = 3$ را حل کنید.
+      **گام 1:** از دو طرف 5 کم می‌کنیم: $x = 3 - 5$.
+      **گام 2:** نتیجه: $x = 2$.
+      جواب: $x = 2$
+  - id: arabic_orthography
+    domain: stem_foundations
+    subdomain: biology
+    doc_type: explainer_article
+    topic: photosynthesis
+    flaw: "Arabic ي/ك, no half-spaces (مي شود، كتاب ها)"
+    expect: {overall_max: 6, natural_persian_max: 5}
+    text: |
+      # فتوسنتز در گياهان
+      فتوسنتز فرايندي است كه در آن گياهان با استفاده از نور خورشيد، آب و كربن دي اكسيد، گلوكز مي سازند. اين فرايند در كلروپلاست ها انجام مي شود و اكسيژن آزاد مي كند. رنگدانه كلروفيل نور را جذب مي كند و انرژي آن صرف ساخت قند مي شود. برگ ها به همين دليل سبز ديده مي شوند.
+  - id: pharm_mechanism_swap
+    domain: medicine_science
+    subdomain: pharmacology
+    doc_type: explainer_article
+    topic: beta blockers
+    flaw: "mechanism swap: beta blockers described as alpha-receptor inhibitors"
+    expect: {overall_max: 4}
+    text: |
+      # بتابلوکرها و سازوکار اثر
+      بتابلوکرها (Beta blockers) دسته‌ای از داروهای قلبی-عروقی‌اند که با مهار گیرنده‌های آلفا-آدرنرژیک در قلب، ضربان و قدرت انقباض را کاهش می‌دهند. کاهش برون‌ده قلبی و مهار آزادسازی رنین از کلیه، فشار خون را پایین می‌آورد. تفاوت نسل‌ها در گزینش‌پذیری گیرنده و اثرهای جانبی مانند برادی‌کاردی است.
+  - id: bio_subtle_slip
+    domain: stem_foundations
+    subdomain: biology
+    doc_type: explainer_article
+    topic: cell organelles
+    flaw: "subtle slip: ribosome called the main site of ATP production"
+    expect: {overall_max: 4}
+    text: |
+      # اندامک‌های سلولی و کار آن‌ها
+      سلول یوکاریوتی اندامک‌های تخصص‌یافته دارد. هسته، محل نگهداری DNA و مرکز فرمان سلول است. شبکهٔ آندوپلاسمی زبر در پردازش پروتئین‌های ترشحی نقش دارد و دستگاه گلژی آن‌ها را بسته‌بندی می‌کند. ریبوزوم محل اصلی تولید ATP سلول است و به همین دلیل به آن نیروگاه سلول می‌گویند. لیزوزوم‌ها با آنزیم‌های گوارشی، مواد زائد را تجزیه می‌کنند.
+  - id: clean_explainer
+    domain: stem_foundations
+    subdomain: physics
+    doc_type: explainer_article
+    topic: capillary action
+    flaw: "none — clean control"
+    expect: {overall_min: 7}
+    text: |
+      # خاصیت مویینگی
+      مویینگی (Capillary action) بالارفتن یا پایین‌رفتن مایع در لوله‌های باریک بدون کمک نیروی خارجی است. این پدیده از رقابت دو نیرو ناشی می‌شود: چسبندگی مولکول‌های مایع به دیوارهٔ لوله (دگرچسبی) و کشش مولکول‌های مایع به یکدیگر (هم‌چسبی). در آب و لولهٔ شیشه‌ای، دگرچسبی غالب است؛ سطح آب مقعر می‌شود و آب در لوله بالا می‌رود؛ هرچه لوله باریک‌تر، صعود بیشتر. در جیوه هم‌چسبی غالب است و سطح محدب پایین‌تر از سطح آزاد می‌ایستد. صعود شیرهٔ خام در آوندهای چوبی گیاهان و نم‌کشیدن دستمال کاغذی، نمونه‌های آشنای همین پدیده‌اند.
+  - id: clean_worked
+    domain: reasoning_cot
+    subdomain: math_problem_solving
+    doc_type: worked_problems
+    topic: ratio problems
+    flaw: "none — clean control"
+    expect: {overall_min: 7}
+    text: |
+      # مسئلهٔ نسبت
+      ### مسئله
+      نسبت شمار دانش‌آموزان دو کلاس 3 به 5 است و روی هم 96 نفرند. هر کلاس چند نفر دارد؟
+      **گام 1:** مجموع سهم‌ها: $3 + 5 = 8$.
+      **گام 2:** ارزش هر سهم: $96 \div 8 = 12$.
+      **گام 3:** کلاس اول: $3 \times 12 = 36$ نفر؛ کلاس دوم: $5 \times 12 = 60$ نفر.
+      **بررسی:** $36 + 60 = 96$. درست است.
+      جواب: 36 و 60
+  - id: freq_error_mains
+    domain: medicine_science
+    subdomain: biomedical_engineering
+    doc_type: explainer_article
+    topic: rectifier ripple frequency
+    flaw: "confident frequency error from an SY-B review sample: ripple given as «۲۵ یا ۱۰۰ هرتز» — half-wave ripple at 50 Hz mains is 50 Hz, full-wave 100 Hz; 25 Hz is wrong"
+    expect: {overall_max: 6, correctness_max: 6}
+    text: |
+      # بسامد ریپل در یکسوسازها
+      در تغذیهٔ تجهیزات پزشکی، خروجی یکسوساز همواره مؤلفه‌ای متناوب به نام ریپل دارد. دامنهٔ این ریپل به ظرفیت خازن صافی و جریان بار بستگی دارد، اما بسامد آن تنها تابع نوع یکسوساز و بسامد شبکه است. با شبکهٔ ۵۰ هرتز، بسامد ریپل بسته به نوع یکسوساز ۲۵ یا ۱۰۰ هرتز است: یکسوساز نیم‌موج مؤلفهٔ اصلی را در ۲۵ هرتز و یکسوساز تمام‌موج در ۱۰۰ هرتز تولید می‌کند. به همین دلیل در طراحی صافی، خازن باید برای پایین‌ترین بسامد ریپل ابعادبندی شود تا افت ولتاژ مجاز حفظ گردد.
+  - id: tautology_padding
+    domain: reasoning_cot
+    subdomain: logic
+    doc_type: explainer_article
+    topic: intuition vs deduction
+    flaw: "tautological redundancies from an SY-B review sample («شهود شهودی» pattern) plus padded restatement; content otherwise correct"
+    expect: {overall_max: 7, informational_density_max: 6}
+    text: |
+      # شهود و استدلال
+      در حل مسئله، دو مسیر مکمل داریم: شهود شهودی که پاسخ را بی‌واسطه و به‌صورت شهودی پیش می‌نهد، و استدلال استنتاجی که با استنتاج گام‌به‌گام به نتیجه می‌رسد. تجربهٔ تجربی نشان می‌دهد که متخصصان ابتدا از شهود بهره می‌گیرند و سپس درستی آن را با استدلال می‌آزمایند. به بیان دیگر، شهود پیشنهاد می‌دهد و استدلال بررسی می‌کند؛ یعنی شهود نقش پیشنهاددهنده دارد و استدلال نقش بررسی‌کننده. این تقسیم کار، همان تقسیم کاری است که در آن هر مسیر کار خود را انجام می‌دهد.

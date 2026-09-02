@@ -1,0 +1,1092 @@
+{
+ "name": "train_v1_1_open",
+ "target_tokens": 48000000000.0,
+ "total_tokens_est": 46352643232.77,
+ "seed": 20260829,
+ "val_permille": 5,
+ "tokenizer_proxy": "bpe64k trained on clean/ sample (clean/_tokenizer/bpe64k.json); real nanochat tokenizer will differ ~±15%",
+ "built_at": "2026-08-29T16:19:02Z",
+ "note": "Category-level public manifest: per-slice shares and totals only; individual sources are listed by count and licence class, never by name. The corpus itself is not redistributed.",
+ "slices": {
+  "fa_web": {
+   "share": 0.6342,
+   "tokens_est": 29398536200,
+   "docs": 29419140,
+   "n_sources": 3,
+   "licence_classes": [
+    "permissive"
+   ],
+   "layer": "scored",
+   "rule": "web_score"
+  },
+  "en_edu": {
+   "share": 0.1545,
+   "tokens_est": 7159231569,
+   "docs": 6669684,
+   "n_sources": 2,
+   "licence_classes": [
+    "permissive"
+   ],
+   "layer": "clean",
+   "rule": "random"
+  },
+  "code_pyts": {
+   "share": 0.0516,
+   "tokens_est": 2392895688,
+   "docs": 2780673,
+   "n_sources": 2,
+   "licence_classes": [
+    "permissive"
+   ],
+   "layer": "clean",
+   "rule": "random"
+  },
+  "code_other": {
+   "share": 0.0515,
+   "tokens_est": 2386664852,
+   "docs": 3961812,
+   "n_sources": 3,
+   "licence_classes": [
+    "permissive",
+    "share-alike"
+   ],
+   "layer": "clean",
+   "rule": "random"
+  },
+  "math": {
+   "share": 0.0516,
+   "tokens_est": 2392366212,
+   "docs": 1062611,
+   "n_sources": 3,
+   "licence_classes": [
+    "permissive",
+    "proprietary/curated"
+   ],
+   "layer": "clean",
+   "rule": "random",
+   "epochs": {
+    "min": 3.0,
+    "max": 3.0
+   }
+  },
+  "fa_lit": {
+   "share": 0.0051,
+   "tokens_est": 235264929,
+   "docs": 640380,
+   "n_sources": 5,
+   "licence_classes": [
+    "proprietary/curated",
+    "public-domain"
+   ],
+   "layer": "deduped",
+   "rule": "all",
+   "epochs": {
+    "min": 3.0,
+    "max": 4.0
+   }
+  },
+  "wiki": {
+   "share": 0.0309,
+   "tokens_est": 1432119873,
+   "docs": 4265832,
+   "n_sources": 2,
+   "licence_classes": [
+    "share-alike"
+   ],
+   "layer": "mixed",
+   "rule": "wiki",
+   "epochs": {
+    "min": 1.0,
+    "max": 4.0
+   }
+  },
+  "parallel": {
+   "share": 0.0206,
+   "tokens_est": 955563905,
+   "docs": 934864,
+   "n_sources": 8,
+   "licence_classes": [
+    "permissive",
+    "public-domain",
+    "research-only",
+    "share-alike"
+   ],
+   "layer": "clean",
+   "rule": "random"
+  }
+ },
+ "n_sources_total": 28,
+ "shards": {
+  "count": {
+   "train": [
+    {
+     "shard": "train/shard_00021.parquet",
+     "docs": 263445,
+     "chars": 994060261
+    },
+    {
+     "shard": "train/shard_00018.parquet",
+     "docs": 263944,
+     "chars": 998286372
+    },
+    {
+     "shard": "train/shard_00009.parquet",
+     "docs": 263365,
+     "chars": 995107854
+    },
+    {
+     "shard": "train/shard_00000.parquet",
+     "docs": 263487,
+     "chars": 990130942
+    },
+    {
+     "shard": "train/shard_00011.parquet",
+     "docs": 262387,
+     "chars": 984719203
+    },
+    {
+     "shard": "train/shard_00004.parquet",
+     "docs": 262391,
+     "chars": 993130104
+    },
+    {
+     "shard": "train/shard_00020.parquet",
+     "docs": 262870,
+     "chars": 992620600
+    },
+    {
+     "shard": "train/shard_00001.parquet",
+     "docs": 263516,
+     "chars": 997148104
+    },
+    {
+     "shard": "train/shard_00006.parquet",
+     "docs": 264131,
+     "chars": 991127646
+    },
+    {
+     "shard": "train/shard_00005.parquet",
+     "docs": 262819,
+     "chars": 983168997
+    },
+    {
+     "shard": "train/shard_00023.parquet",
+     "docs": 263576,
+     "chars": 997037574
+    },
+    {
+     "shard": "train/shard_00019.parquet",
+     "docs": 263536,
+     "chars": 1000724851
+    },
+    {
+     "shard": "train/shard_00022.parquet",
+     "docs": 262574,
+     "chars": 995620233
+    },
+    {
+     "shard": "train/shard_00017.parquet",
+     "docs": 263193,
+     "chars": 988828793
+    },
+    {
+     "shard": "train/shard_00015.parquet",
+     "docs": 262667,
+     "chars": 991787451
+    },
+    {
+     "shard": "train/shard_00014.parquet",
+     "docs": 262471,
+     "chars": 985619367
+    },
+    {
+     "shard": "train/shard_00008.parquet",
+     "docs": 263166,
+     "chars": 992472761
+    },
+    {
+     "shard": "train/shard_00016.parquet",
+     "docs": 263032,
+     "chars": 987150071
+    },
+    {
+     "shard": "train/shard_00013.parquet",
+     "docs": 262634,
+     "chars": 991103740
+    },
+    {
+     "shard": "train/shard_00012.parquet",
+     "docs": 263130,
+     "chars": 994329879
+    },
+    {
+     "shard": "train/shard_00002.parquet",
+     "docs": 263900,
+     "chars": 993722340
+    },
+    {
+     "shard": "train/shard_00003.parquet",
+     "docs": 262441,
+     "chars": 994499586
+    },
+    {
+     "shard": "train/shard_00010.parquet",
+     "docs": 263079,
+     "chars": 991901217
+    },
+    {
+     "shard": "train/shard_00007.parquet",
+     "docs": 264181,
+     "chars": 997393848
+    },
+    {
+     "shard": "train/shard_00024.parquet",
+     "docs": 262877,
+     "chars": 990698606
+    },
+    {
+     "shard": "train/shard_00025.parquet",
+     "docs": 263350,
+     "chars": 998845042
+    },
+    {
+     "shard": "train/shard_00026.parquet",
+     "docs": 263994,
+     "chars": 997526879
+    },
+    {
+     "shard": "train/shard_00027.parquet",
+     "docs": 263354,
+     "chars": 995931752
+    },
+    {
+     "shard": "train/shard_00028.parquet",
+     "docs": 262687,
+     "chars": 986964221
+    },
+    {
+     "shard": "train/shard_00029.parquet",
+     "docs": 263119,
+     "chars": 988361517
+    },
+    {
+     "shard": "train/shard_00030.parquet",
+     "docs": 263280,
+     "chars": 993670313
+    },
+    {
+     "shard": "train/shard_00031.parquet",
+     "docs": 262328,
+     "chars": 987867314
+    },
+    {
+     "shard": "train/shard_00033.parquet",
+     "docs": 262458,
+     "chars": 991813819
+    },
+    {
+     "shard": "train/shard_00036.parquet",
+     "docs": 263173,
+     "chars": 996861840
+    },
+    {
+     "shard": "train/shard_00035.parquet",
+     "docs": 263115,
+     "chars": 999024479
+    },
+    {
+     "shard": "train/shard_00034.parquet",
+     "docs": 263399,
+     "chars": 992629325
+    },
+    {
+     "shard": "train/shard_00032.parquet",
+     "docs": 264184,
+     "chars": 992052816
+    },
+    {
+     "shard": "train/shard_00037.parquet",
+     "docs": 262880,
+     "chars": 995699411
+    },
+    {
+     "shard": "train/shard_00039.parquet",
+     "docs": 263427,
+     "chars": 993437262
+    },
+    {
+     "shard": "train/shard_00038.parquet",
+     "docs": 263545,
+     "chars": 993012456
+    },
+    {
+     "shard": "train/shard_00043.parquet",
+     "docs": 263348,
+     "chars": 988396471
+    },
+    {
+     "shard": "train/shard_00044.parquet",
+     "docs": 262589,
+     "chars": 989621110
+    },
+    {
+     "shard": "train/shard_00042.parquet",
+     "docs": 263283,
+     "chars": 993429926
+    },
+    {
+     "shard": "train/shard_00047.parquet",
+     "docs": 262151,
+     "chars": 984180308
+    },
+    {
+     "shard": "train/shard_00041.parquet",
+     "docs": 263116,
+     "chars": 991383947
+    },
+    {
+     "shard": "train/shard_00040.parquet",
+     "docs": 263053,
+     "chars": 989228175
+    },
+    {
+     "shard": "train/shard_00045.parquet",
+     "docs": 262839,
+     "chars": 1001819456
+    },
+    {
+     "shard": "train/shard_00046.parquet",
+     "docs": 261883,
+     "chars": 992110929
+    },
+    {
+     "shard": "train/shard_00048.parquet",
+     "docs": 263428,
+     "chars": 1000731271
+    },
+    {
+     "shard": "train/shard_00049.parquet",
+     "docs": 263429,
+     "chars": 988869396
+    },
+    {
+     "shard": "train/shard_00050.parquet",
+     "docs": 262824,
+     "chars": 990795192
+    },
+    {
+     "shard": "train/shard_00051.parquet",
+     "docs": 263940,
+     "chars": 1001995041
+    },
+    {
+     "shard": "train/shard_00052.parquet",
+     "docs": 263007,
+     "chars": 990067438
+    },
+    {
+     "shard": "train/shard_00053.parquet",
+     "docs": 262603,
+     "chars": 1004409127
+    },
+    {
+     "shard": "train/shard_00055.parquet",
+     "docs": 263378,
+     "chars": 998732903
+    },
+    {
+     "shard": "train/shard_00054.parquet",
+     "docs": 262700,
+     "chars": 990923855
+    },
+    {
+     "shard": "train/shard_00057.parquet",
+     "docs": 262932,
+     "chars": 988984879
+    },
+    {
+     "shard": "train/shard_00058.parquet",
+     "docs": 263389,
+     "chars": 996547714
+    },
+    {
+     "shard": "train/shard_00056.parquet",
+     "docs": 263290,
+     "chars": 996019128
+    },
+    {
+     "shard": "train/shard_00059.parquet",
+     "docs": 263423,
+     "chars": 991845109
+    },
+    {
+     "shard": "train/shard_00060.parquet",
+     "docs": 263332,
+     "chars": 996441424
+    },
+    {
+     "shard": "train/shard_00061.parquet",
+     "docs": 263076,
+     "chars": 992622635
+    },
+    {
+     "shard": "train/shard_00062.parquet",
+     "docs": 262925,
+     "chars": 991692130
+    },
+    {
+     "shard": "train/shard_00063.parquet",
+     "docs": 263448,
+     "chars": 1001264190
+    },
+    {
+     "shard": "train/shard_00066.parquet",
+     "docs": 262830,
+     "chars": 995333413
+    },
+    {
+     "shard": "train/shard_00068.parquet",
+     "docs": 263230,
+     "chars": 993133793
+    },
+    {
+     "shard": "train/shard_00069.parquet",
+     "docs": 262073,
+     "chars": 982961388
+    },
+    {
+     "shard": "train/shard_00071.parquet",
+     "docs": 262976,
+     "chars": 992376470
+    },
+    {
+     "shard": "train/shard_00064.parquet",
+     "docs": 262786,
+     "chars": 994085452
+    },
+    {
+     "shard": "train/shard_00065.parquet",
+     "docs": 263041,
+     "chars": 989551077
+    },
+    {
+     "shard": "train/shard_00067.parquet",
+     "docs": 263317,
+     "chars": 994070473
+    },
+    {
+     "shard": "train/shard_00070.parquet",
+     "docs": 262745,
+     "chars": 994678986
+    },
+    {
+     "shard": "train/shard_00072.parquet",
+     "docs": 263475,
+     "chars": 990411520
+    },
+    {
+     "shard": "train/shard_00073.parquet",
+     "docs": 263900,
+     "chars": 992837140
+    },
+    {
+     "shard": "train/shard_00074.parquet",
+     "docs": 262634,
+     "chars": 992167145
+    },
+    {
+     "shard": "train/shard_00075.parquet",
+     "docs": 263245,
+     "chars": 994622631
+    },
+    {
+     "shard": "train/shard_00076.parquet",
+     "docs": 263993,
+     "chars": 994245711
+    },
+    {
+     "shard": "train/shard_00077.parquet",
+     "docs": 263103,
+     "chars": 988750301
+    },
+    {
+     "shard": "train/shard_00079.parquet",
+     "docs": 262953,
+     "chars": 992138301
+    },
+    {
+     "shard": "train/shard_00078.parquet",
+     "docs": 263158,
+     "chars": 992736616
+    },
+    {
+     "shard": "train/shard_00080.parquet",
+     "docs": 263566,
+     "chars": 997394205
+    },
+    {
+     "shard": "train/shard_00081.parquet",
+     "docs": 263634,
+     "chars": 995616022
+    },
+    {
+     "shard": "train/shard_00082.parquet",
+     "docs": 262997,
+     "chars": 993771306
+    },
+    {
+     "shard": "train/shard_00083.parquet",
+     "docs": 263103,
+     "chars": 996551388
+    },
+    {
+     "shard": "train/shard_00084.parquet",
+     "docs": 262669,
+     "chars": 981406406
+    },
+    {
+     "shard": "train/shard_00087.parquet",
+     "docs": 262969,
+     "chars": 996613856
+    },
+    {
+     "shard": "train/shard_00088.parquet",
+     "docs": 263581,
+     "chars": 993938136
+    },
+    {
+     "shard": "train/shard_00086.parquet",
+     "docs": 263768,
+     "chars": 1002634914
+    },
+    {
+     "shard": "train/shard_00090.parquet",
+     "docs": 262589,
+     "chars": 990786185
+    },
+    {
+     "shard": "train/shard_00089.parquet",
+     "docs": 262535,
+     "chars": 987912041
+    },
+    {
+     "shard": "train/shard_00094.parquet",
+     "docs": 263259,
+     "chars": 995500703
+    },
+    {
+     "shard": "train/shard_00085.parquet",
+     "docs": 263582,
+     "chars": 992144272
+    },
+    {
+     "shard": "train/shard_00091.parquet",
+     "docs": 264052,
+     "chars": 1000080089
+    },
+    {
+     "shard": "train/shard_00092.parquet",
+     "docs": 262931,
+     "chars": 993761177
+    },
+    {
+     "shard": "train/shard_00096.parquet",
+     "docs": 263120,
+     "chars": 992237800
+    },
+    {
+     "shard": "train/shard_00093.parquet",
+     "docs": 262709,
+     "chars": 996019536
+    },
+    {
+     "shard": "train/shard_00095.parquet",
+     "docs": 263306,
+     "chars": 994553216
+    },
+    {
+     "shard": "train/shard_00097.parquet",
+     "docs": 263013,
+     "chars": 987028008
+    },
+    {
+     "shard": "train/shard_00098.parquet",
+     "docs": 262655,
+     "chars": 990133553
+    },
+    {
+     "shard": "train/shard_00099.parquet",
+     "docs": 263618,
+     "chars": 994570870
+    },
+    {
+     "shard": "train/shard_00100.parquet",
+     "docs": 263409,
+     "chars": 986213069
+    },
+    {
+     "shard": "train/shard_00101.parquet",
+     "docs": 262784,
+     "chars": 981335907
+    },
+    {
+     "shard": "train/shard_00102.parquet",
+     "docs": 263952,
+     "chars": 994471858
+    },
+    {
+     "shard": "train/shard_00103.parquet",
+     "docs": 263660,
+     "chars": 992908651
+    },
+    {
+     "shard": "train/shard_00104.parquet",
+     "docs": 262810,
+     "chars": 992811905
+    },
+    {
+     "shard": "train/shard_00105.parquet",
+     "docs": 263411,
+     "chars": 992332564
+    },
+    {
+     "shard": "train/shard_00106.parquet",
+     "docs": 262801,
+     "chars": 989974362
+    },
+    {
+     "shard": "train/shard_00107.parquet",
+     "docs": 262795,
+     "chars": 990991164
+    },
+    {
+     "shard": "train/shard_00108.parquet",
+     "docs": 263004,
+     "chars": 989854188
+    },
+    {
+     "shard": "train/shard_00111.parquet",
+     "docs": 262680,
+     "chars": 992785391
+    },
+    {
+     "shard": "train/shard_00110.parquet",
+     "docs": 262352,
+     "chars": 984277033
+    },
+    {
+     "shard": "train/shard_00109.parquet",
+     "docs": 262365,
+     "chars": 983853192
+    },
+    {
+     "shard": "train/shard_00114.parquet",
+     "docs": 262937,
+     "chars": 987709524
+    },
+    {
+     "shard": "train/shard_00112.parquet",
+     "docs": 263542,
+     "chars": 997827361
+    },
+    {
+     "shard": "train/shard_00113.parquet",
+     "docs": 263601,
+     "chars": 1000404067
+    },
+    {
+     "shard": "train/shard_00116.parquet",
+     "docs": 263382,
+     "chars": 1000881742
+    },
+    {
+     "shard": "train/shard_00117.parquet",
+     "docs": 263968,
+     "chars": 995549778
+    },
+    {
+     "shard": "train/shard_00115.parquet",
+     "docs": 262600,
+     "chars": 988881084
+    },
+    {
+     "shard": "train/shard_00118.parquet",
+     "docs": 262280,
+     "chars": 988299045
+    },
+    {
+     "shard": "train/shard_00119.parquet",
+     "docs": 264007,
+     "chars": 1002806553
+    },
+    {
+     "shard": "train/shard_00121.parquet",
+     "docs": 263806,
+     "chars": 994736881
+    },
+    {
+     "shard": "train/shard_00120.parquet",
+     "docs": 263956,
+     "chars": 993065461
+    },
+    {
+     "shard": "train/shard_00122.parquet",
+     "docs": 263280,
+     "chars": 997638515
+    },
+    {
+     "shard": "train/shard_00123.parquet",
+     "docs": 263286,
+     "chars": 986087698
+    },
+    {
+     "shard": "train/shard_00124.parquet",
+     "docs": 262716,
+     "chars": 990436163
+    },
+    {
+     "shard": "train/shard_00125.parquet",
+     "docs": 263534,
+     "chars": 996264133
+    },
+    {
+     "shard": "train/shard_00126.parquet",
+     "docs": 262664,
+     "chars": 991871921
+    },
+    {
+     "shard": "train/shard_00127.parquet",
+     "docs": 263387,
+     "chars": 993253226
+    },
+    {
+     "shard": "train/shard_00128.parquet",
+     "docs": 263666,
+     "chars": 995828346
+    },
+    {
+     "shard": "train/shard_00129.parquet",
+     "docs": 262945,
+     "chars": 993061345
+    },
+    {
+     "shard": "train/shard_00130.parquet",
+     "docs": 262722,
+     "chars": 989587407
+    },
+    {
+     "shard": "train/shard_00131.parquet",
+     "docs": 263342,
+     "chars": 992342491
+    },
+    {
+     "shard": "train/shard_00132.parquet",
+     "docs": 262968,
+     "chars": 992370466
+    },
+    {
+     "shard": "train/shard_00133.parquet",
+     "docs": 263509,
+     "chars": 991368544
+    },
+    {
+     "shard": "train/shard_00135.parquet",
+     "docs": 263256,
+     "chars": 987839931
+    },
+    {
+     "shard": "train/shard_00134.parquet",
+     "docs": 262306,
+     "chars": 991315733
+    },
+    {
+     "shard": "train/shard_00136.parquet",
+     "docs": 262718,
+     "chars": 988958799
+    },
+    {
+     "shard": "train/shard_00137.parquet",
+     "docs": 263177,
+     "chars": 990413844
+    },
+    {
+     "shard": "train/shard_00138.parquet",
+     "docs": 263929,
+     "chars": 988024327
+    },
+    {
+     "shard": "train/shard_00139.parquet",
+     "docs": 263275,
+     "chars": 997017318
+    },
+    {
+     "shard": "train/shard_00140.parquet",
+     "docs": 264129,
+     "chars": 994744815
+    },
+    {
+     "shard": "train/shard_00143.parquet",
+     "docs": 263476,
+     "chars": 986195810
+    },
+    {
+     "shard": "train/shard_00142.parquet",
+     "docs": 262906,
+     "chars": 982988450
+    },
+    {
+     "shard": "train/shard_00146.parquet",
+     "docs": 262585,
+     "chars": 992846527
+    },
+    {
+     "shard": "train/shard_00141.parquet",
+     "docs": 263002,
+     "chars": 986929792
+    },
+    {
+     "shard": "train/shard_00144.parquet",
+     "docs": 262895,
+     "chars": 984806763
+    },
+    {
+     "shard": "train/shard_00145.parquet",
+     "docs": 263273,
+     "chars": 993946566
+    },
+    {
+     "shard": "train/shard_00147.parquet",
+     "docs": 262570,
+     "chars": 984926449
+    },
+    {
+     "shard": "train/shard_00150.parquet",
+     "docs": 262656,
+     "chars": 990913230
+    },
+    {
+     "shard": "train/shard_00149.parquet",
+     "docs": 263331,
+     "chars": 995426269
+    },
+    {
+     "shard": "train/shard_00148.parquet",
+     "docs": 263213,
+     "chars": 991579363
+    },
+    {
+     "shard": "train/shard_00151.parquet",
+     "docs": 262529,
+     "chars": 982713518
+    },
+    {
+     "shard": "train/shard_00152.parquet",
+     "docs": 263882,
+     "chars": 991026860
+    },
+    {
+     "shard": "train/shard_00153.parquet",
+     "docs": 263667,
+     "chars": 1001511644
+    },
+    {
+     "shard": "train/shard_00154.parquet",
+     "docs": 262886,
+     "chars": 995955418
+    },
+    {
+     "shard": "train/shard_00155.parquet",
+     "docs": 263602,
+     "chars": 994935218
+    },
+    {
+     "shard": "train/shard_00156.parquet",
+     "docs": 263819,
+     "chars": 993131650
+    },
+    {
+     "shard": "train/shard_00157.parquet",
+     "docs": 263101,
+     "chars": 993269279
+    },
+    {
+     "shard": "train/shard_00158.parquet",
+     "docs": 262998,
+     "chars": 996373519
+    },
+    {
+     "shard": "train/shard_00159.parquet",
+     "docs": 263403,
+     "chars": 994712657
+    },
+    {
+     "shard": "train/shard_00160.parquet",
+     "docs": 262349,
+     "chars": 994058293
+    },
+    {
+     "shard": "train/shard_00161.parquet",
+     "docs": 262607,
+     "chars": 995092098
+    },
+    {
+     "shard": "train/shard_00162.parquet",
+     "docs": 262923,
+     "chars": 985815996
+    },
+    {
+     "shard": "train/shard_00163.parquet",
+     "docs": 263299,
+     "chars": 994593768
+    },
+    {
+     "shard": "train/shard_00164.parquet",
+     "docs": 263203,
+     "chars": 992788518
+    },
+    {
+     "shard": "train/shard_00165.parquet",
+     "docs": 263404,
+     "chars": 997717145
+    },
+    {
+     "shard": "train/shard_00166.parquet",
+     "docs": 263395,
+     "chars": 994270959
+    },
+    {
+     "shard": "train/shard_00171.parquet",
+     "docs": 263192,
+     "chars": 988542688
+    },
+    {
+     "shard": "train/shard_00172.parquet",
+     "docs": 263803,
+     "chars": 994908611
+    },
+    {
+     "shard": "train/shard_00167.parquet",
+     "docs": 262042,
+     "chars": 988735793
+    },
+    {
+     "shard": "train/shard_00168.parquet",
+     "docs": 263835,
+     "chars": 992305921
+    },
+    {
+     "shard": "train/shard_00169.parquet",
+     "docs": 262769,
+     "chars": 991478167
+    },
+    {
+     "shard": "train/shard_00170.parquet",
+     "docs": 263106,
+     "chars": 997723838
+    },
+    {
+     "shard": "train/shard_00175.parquet",
+     "docs": 263626,
+     "chars": 987997380
+    },
+    {
+     "shard": "train/shard_00176.parquet",
+     "docs": 262344,
+     "chars": 991566126
+    },
+    {
+     "shard": "train/shard_00174.parquet",
+     "docs": 263550,
+     "chars": 993405932
+    },
+    {
+     "shard": "train/shard_00173.parquet",
+     "docs": 263717,
+     "chars": 996620666
+    },
+    {
+     "shard": "train/shard_00177.parquet",
+     "docs": 263285,
+     "chars": 996421034
+    },
+    {
+     "shard": "train/shard_00179.parquet",
+     "docs": 263768,
+     "chars": 993195461
+    },
+    {
+     "shard": "train/shard_00178.parquet",
+     "docs": 262505,
+     "chars": 987520687
+    },
+    {
+     "shard": "train/shard_00180.parquet",
+     "docs": 262699,
+     "chars": 987195893
+    },
+    {
+     "shard": "train/shard_00181.parquet",
+     "docs": 263370,
+     "chars": 995756913
+    },
+    {
+     "shard": "train/shard_00183.parquet",
+     "docs": 262525,
+     "chars": 995272098
+    },
+    {
+     "shard": "train/shard_00182.parquet",
+     "docs": 262900,
+     "chars": 989010505
+    },
+    {
+     "shard": "train/shard_00184.parquet",
+     "docs": 263725,
+     "chars": 994328792
+    },
+    {
+     "shard": "train/shard_00185.parquet",
+     "docs": 263202,
+     "chars": 1001719013
+    },
+    {
+     "shard": "train/shard_00187.parquet",
+     "docs": 263154,
+     "chars": 990040209
+    },
+    {
+     "shard": "train/shard_00186.parquet",
+     "docs": 263842,
+     "chars": 993650602
+    },
+    {
+     "shard": "train/shard_00188.parquet",
+     "docs": 262546,
+     "chars": 988914278
+    }
+   ],
+   "val": [
+    {
+     "shard": "val/shard_00000.parquet",
+     "docs": 58372,
+     "chars": 229887066
+    },
+    {
+     "shard": "val/shard_00001.parquet",
+     "docs": 58534,
+     "chars": 230472325
+    },
+    {
+     "shard": "val/shard_00002.parquet",
+     "docs": 58859,
+     "chars": 232509385
+    },
+    {
+     "shard": "val/shard_00003.parquet",
+     "docs": 58643,
+     "chars": 227886569
+    }
+   ]
+  }
+ }
+}

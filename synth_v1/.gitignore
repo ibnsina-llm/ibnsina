@@ -1,0 +1,4 @@
+# corpus/generated text never enters the repo
+anchors/
+pilot/
+*.jsonl

@@ -1,0 +1,16 @@
+datatrove[processing]
+fasttext-wheel
+tokenizers
+pyarrow
+zstandard
+orjson
+xxhash
+regex
+tiktoken
+wikiextractor
+trafilatura
+pymupdf
+numpy
+pandas
+tqdm
+huggingface_hub

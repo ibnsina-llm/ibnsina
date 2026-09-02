@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+/data/
+/models/
+*.log
+pipeline/licenses_private.json
+pipeline/sources_private.py
+pipeline/sources_private.json
+jobs/private_sources.env
+docs/report/private/

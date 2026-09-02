@@ -1,0 +1,101 @@
+{
+  "benchmark": "PersianMedQA test split, 5,235 questions with a complete option set",
+  "protocol": "identical to the frontier sweep: paper zero-shot prompt, temperature 0, answer = option number; unparsed counted wrong in acc_all; models with unparsed rows retried once at a 2,048-token cap",
+  "date": "2026-08-31",
+  "hosted_small": {
+    "qwen__qwen3-8b": {
+      "display": "Qwen3 8B",
+      "params_b": 8.2,
+      "acc_all": 46.0,
+      "unparsed": 0,
+      "n": 5235,
+      "via": "hosted API"
+    },
+    "google__gemma-3-4b-it": {
+      "display": "Gemma 3 4B",
+      "params_b": 4.3,
+      "acc_all": 37.94,
+      "unparsed": 0,
+      "n": 5235,
+      "via": "hosted API"
+    },
+    "meta-llama__llama-3.2-3b-instruct": {
+      "display": "Llama 3.2 3B",
+      "params_b": 3.2,
+      "acc_all": 30.91,
+      "unparsed": 1,
+      "n": 5235,
+      "via": "hosted API"
+    },
+    "microsoft__phi-4": {
+      "display": "Phi-4 14B",
+      "params_b": 14.7,
+      "acc_all": 30.45,
+      "unparsed": 0,
+      "n": 5235,
+      "via": "hosted API"
+    },
+    "meta-llama__llama-3.2-1b-instruct": {
+      "display": "Llama 3.2 1B",
+      "params_b": 1.2,
+      "acc_all": 24.85,
+      "unparsed": 0,
+      "n": 5235,
+      "via": "hosted API"
+    }
+  },
+  "local": {
+    "qwen3-4b-instruct-2507": {
+      "display": "Qwen3 4B Instruct",
+      "params_b": 4.0,
+      "acc_all": 41.89,
+      "unparsed": 4,
+      "n": 5235,
+      "via": "local vLLM"
+    },
+    "qwen3-1.7b": {
+      "display": "Qwen3 1.7B (thinking)",
+      "params_b": 1.7,
+      "acc_all": 33.83,
+      "unparsed": 955,
+      "n": 5235,
+      "via": "local vLLM"
+    },
+    "gemma-3-1b-it": {
+      "display": "Gemma 3 1B",
+      "params_b": 1.0,
+      "acc_all": 27.43,
+      "unparsed": 0,
+      "n": 5235,
+      "via": "local vLLM"
+    },
+    "ibnsina-1.5b": {
+      "display": "IbnSina 1.5B (this work)",
+      "params_b": 1.48,
+      "acc_all": 22.64,
+      "unparsed": 388,
+      "n": 5235,
+      "via": "local llama.cpp",
+      "highlight": true
+    },
+    "persianmind-v1.0": {
+      "display": "PersianMind 7B",
+      "params_b": 6.8,
+      "acc_all": 25.56,
+      "unparsed": 412,
+      "n": 5235,
+      "via": "local vLLM"
+    },
+    "maral-7b-alpha-1": {
+      "display": "Maral 7B",
+      "params_b": 7.0,
+      "acc_all": 21.51,
+      "unparsed": 722,
+      "n": 5235,
+      "via": "local vLLM"
+    }
+  },
+  "excluded": {
+    "PartAI/Dorna2-Llama3.1-8B-Instruct": "could not run the identical protocol — gated weights, access request pending"
+  }
+}

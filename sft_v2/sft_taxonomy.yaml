@@ -1,0 +1,200 @@
+# IbnSina sft_v2 — dataset recipe (publishable). One entry per category. Counts are KEPT conversations after the judge.
+version: 2
+model_family: IbnSina
+output: ${CORPUS_BUCKET:-gs://YOUR-BUCKET}/sft/v2
+chat_format: nanochat  # <|bos|><|user_start|>…<|user_end|><|assistant_start|>…<|assistant_end|>; tools: <|python_start|>…<|python_end|><|output_start|>…<|output_end|>
+tokenizer: ${CORPUS_BUCKET:-gs://YOUR-BUCKET}/tokenizer/v2_32k_llama
+teachers:
+  gemini: {share: 0.70, model: gemini-2.5-flash, via: vertex, thinking_budget: 0, temperature: 0.9}
+  kimi: {share: 0.30, model: moonshotai/kimi-k3, via: openrouter, temperature: 0.9}   # $3/$15 per M tokens — share/scope set at STOP S-A within the $30 cap
+generation:
+  oversample: 3            # candidates generated per kept conversation target
+  seeds_per_prompt: 3      # rotating gold seeds shown in each generation prompt
+  scenario_from_axes: true # every prompt samples persona × register × length × domain (× turns)
+judge:
+  model: gemini-2.5-flash   # calibration 2026-08-29: Flash-Lite missed wrong-math answers (scored 9 where Flash scored 1) -> judge on Flash
+  scale: 1-10
+  criteria: [correctness, natural_persian_no_translationese, instruction_adherence, register_match, safety_and_respect_rules]
+  keep_fraction: 0.34      # informational: at 3x oversample the selection below equals the top third
+  min_score: 6
+  keep_min: 7              # selection = best-first up to target with overall >= keep_min (2026-08-30: 2x categories were stopping at 0.67x target)
+  keep_rate_floor: 0.15    # below this for any category: STOP and show Sina before spending more
+  auto_checks: [assistant_langid_fa_or_expected, repetition_loop, length_sanity, no_teacher_self_reference]
+  dpo_pairs: sft/v2/dpo_pairs/   # best-vs-worst sibling per prompt
+assembly:
+  normalize: "normalize_fa (same as pretraining: Persian digits -> ASCII, kaf/yeh, ZWNJ cleanup)"
+  decontaminate_against: [parsinlu, khayyam, percor, taraz, ghazalbench]
+  decontamination_method: exact question match + normalized 13-gram overlap
+  holdout_sft_eval: 500     # stratified across categories
+  manifest: per-category counts, teacher split, license tags, seed hashes, prompt hashes
+diversity_axes:
+  persona: [دانش‌آموز دبیرستانی, دانشجو, والدِ کودک دبستانی, کارمند/شاغل, صاحب کسب‌وکار کوچک, سالمند, نوجوان, مهاجر تازه‌وارد]
+  register: [رسمی, نیمه‌رسمی, محاوره‌ای]
+  length: [کوتاه, متوسط, بلند]
+  turns: [1, 2, 3, 4]
+  city_or_region: [تهران, اصفهان, مشهد, شیراز, تبریز, رشت, اهواز, بندرعباس, روستا/شهر کوچک, خارج از ایران]
+
+categories:
+  # ---------------- bulk ----------------
+  - name: general_instruction
+    group: bulk
+    target: 25000
+    oversample: 2            # approved: 2x on this bulk category only
+    seed_count: 10
+    multi_turn_share: 0.40
+    domains: [فناوری و نرم‌افزار, سلامت عمومی, آشپزی, سفر, مالی شخصی, زبان و ادبیات, علوم, تاریخ, ورزش, هنر و موسیقی, خانه و خانواده, حیوانات خانگی, باغبانی, محیط زیست, حقوق شهروندی, خودرو, تحصیل, کسب‌وکار]
+    task_types: [توضیح مفهوم, راهنمای گام‌به‌گام, خلاصه‌سازی متن داده‌شده, بازنویسی/ساده‌سازی, مقایسه, ایده‌پردازی, پرسش‌وپاسخ روزمره, گفتگوی چندمرحله‌ای]
+    extra_sources: [smoltalk multi-turn translated with Gemini (judge-filtered like everything else)]
+    rubric: |
+      پاسخ‌های مفید، درست و به فارسیِ طبیعی. ساختار متناسب با درخواست (نه لیست اجباری). طول متناسب: سوال ساده = پاسخ کوتاه.
+      وقتی متنی برای خلاصه/بازنویسی داده می‌شود، فقط همان متن مبنا باشد. در گفتگوی چندمرحله‌ای، پیام‌های بعدی به قبلی‌ها ارجاع واقعی دارند.
+      ممنوع: ترجمه‌زدگی («این یک سوال عالی است»)، پرگویی، تکرار سوال کاربر، ایموجی بی‌دلیل.
+  - name: reasoning_math_cot_fa
+    group: bulk
+    target: 5000
+    seed_count: 8
+    multi_turn_share: 0.10
+    domains: [حساب و کسر و درصد, نسبت و تناسب, معادله و نامعادله, هندسه, احتمال و آمار پایه, مسائل کلامی کنکور/تیزهوشان, منطق و استدلال, واحدها و تبدیل‌ها]
+    rubric: |
+      حل گام‌به‌گام به فارسی، با اعداد لاتین (0-9)، هر گام یک کار مشخص، محاسبات درست، جواب نهایی در یک خط جدا («جواب: …»).
+      وقتی سوال ناقص است، فرض‌ها را صریح بنویس. جواب حدسی ممنوع؛ اگر چند حالت هست، همه را بررسی کن.
+  - name: persian_native
+    group: bulk
+    target: 5000
+    seed_count: 6
+    multi_turn_share: 0.20
+    sources: [farsinstruct/pn_sum (MIT), farsinstruct/syntran (MIT), farsinstruct/wiki_sum (CC-BY-SA), farsinstruct/p3_qa_translated (Apache-2.0)]
+    rubric: |
+      داده‌های بومی فارسی را به گفتگوی طبیعی تبدیل کن: به‌جای قالب «متن: … / خلاصه:» کاربر واقعاً درخواست می‌کند («این خبر رو برام خلاصه کن») و دستیار طبیعی جواب می‌دهد.
+      متن مبنا عیناً از منبع مجاز می‌آید؛ پاسخ باید با منبع سازگار باشد (بدون افزودن ادعای تازه).
+  - name: formatting_control
+    group: bulk
+    target: 5000
+    seed_count: 10
+    multi_turn_share: 0.15
+    subtypes:
+      - {name: list_when_asked, share: 0.15}
+      - {name: table_markdown, share: 0.15}
+      - {name: json_output, share: 0.15}
+      - {name: length_limit, share: 0.15}
+      - {name: one_line_answer, share: 0.10}
+      - {name: mc_letter_answer, share: 0.12, note: "سوال چندگزینه‌ای با گزینه‌های =A/=B/=C/=D — پاسخ فقط حرف گزینه (قالب ارزیابی ParsiNLU/Khayyam)"}
+      - {name: yes_no_answer, share: 0.10, note: "پاسخ فقط «بله» یا «خیر» (و اگر خواسته شد، یک جمله دلیل) — رفع سوگیری yes/no مشاهده‌شده در پایلوت"}
+      - {name: three_way_choice, share: 0.08, note: "استلزام/تناقض/نامشخص و مشابه‌ها با پاسخ تک‌گزینه‌ای"}
+    rubric: |
+      دقیقاً همان قالبی که خواسته شده: اگر JSON خواسته شده فقط JSON معتبر؛ اگر «در یک خط» گفته شده، یک خط؛ محدودیت طول (تعداد کلمه/جمله) رعایت شود.
+      جدول‌ها Markdown معتبر با سرستون. در پاسخ‌های تک‌حرفی/بله‌خیر هیچ چیز اضافه‌ای نیاید.
+  # ------------- differentiators -------------
+  - name: persian_writing
+    group: differentiator
+    target: 2000
+    seed_count: 8
+    multi_turn_share: 0.30
+    subtypes: [نامه اداری, نامه/پیام شخصی, ایمیل کاری, ویرایش و اصلاح متن فارسی (املا، نشانه‌گذاری، نیم‌فاصله), بازنویسی رسمی/محاوره‌ای, شعر در قالب کلاسیک (غزل، رباعی، دوبیتی، مثنوی) با وزن و قافیه, متن تبریک و تسلیت]
+    rubric: |
+      نثر اداری با تعارفات متعارف و درست («با سلام و احترام»، «به استحضار می‌رساند»)، بدون ترجمه‌زدگی. در ویرایش، فقط اصلاح؛ تغییر معنا ممنوع؛ در صورت درخواست، فهرست اصلاحات.
+      شعر: وزن و قافیه رعایت شود؛ اگر نمی‌شود، صادقانه بگو و نزدیک‌ترین نتیجه را بده.
+  - name: translation_fa_en
+    group: differentiator
+    target: 2000
+    seed_count: 8
+    multi_turn_share: 0.20
+    subtypes: [fa->en, en->fa, اصطلاح و ضرب‌المثل (معادل، نه تحت‌اللفظی), توضیح اصطلاح انگلیسی به فارسی, فینگلیش -> خط فارسی, ترجمه با حفظ لحن/رجیستر]
+    rubric: |
+      ترجمه دقیق و روان با حفظ معنا و لحن؛ اصطلاح‌ها معادل طبیعی بگیرند. متن مبدأ را تغییر نده. فینگلیش را با املای درست فارسی و نیم‌فاصله بنویس.
+  - name: iran_knowledge
+    group: differentiator
+    target: 2000
+    seed_count: 8
+    multi_turn_share: 0.25
+    domains: [ادبیات و شاعران و آثارشان, تاریخ ایران (از باستان تا معاصر), جغرافیا و استان‌ها و شهرها, غذاها و آداب سفره, مناسبت‌ها و تقویم شمسی, تبدیل تاریخ شمسی<->میلادی<->قمری, موسیقی و هنر, معماری و آثار تاریخی]
+    grounding: curated corpus (fawiki, ganjoor, history, chap textbooks) — teacher prompts carry a retrieved passage when available; answers must not contradict it
+    rubric: |
+      پاسخ‌های دقیق و مستند؛ تاریخ‌ها و نام‌ها درست. اگر منبع داده شده، از همان استفاده کن. تبدیل تاریخ با محاسبهٔ درست (و ذکر اینکه روز ممکن است ±1 باشد اگر ساعت/منطقه مشخص نیست).
+      ابیات را دقیق نقل کن؛ اگر مطمئن نیستی، بگو.
+  - name: everyday_advice
+    group: differentiator
+    target: 1500
+    seed_count: 8
+    multi_turn_share: 0.35
+    domains: [شغل و مصاحبه, درس و کنکور, روابط خانوادگی, مدیریت زمان و عادت‌ها, مالی روزمره, سلامت عمومی و تغذیه, حقوقی عمومی (قرارداد اجاره، حقوق کار), سفر و مهاجرت]
+    rubric: |
+      عملی، مشخص، بدون کلی‌گویی. پزشکی/حقوقی: اطلاعات عمومی آزادانه داده می‌شود، به شکل «اطلاعات» نه «دستور»؛ برای تصمیم‌ها «با پزشک/وکیل مشورت کن»؛ در موارد حاد شمارهٔ 115 (اورژانس). لحن گرم، بدون موعظه.
+  - name: taarof_register
+    group: differentiator
+    target: 500
+    seed_count: 8
+    multi_turn_share: 0.70
+    reference: EMNLP taarof paper scenarios — ritual vs genuine offers, declining-then-accepting, host/guest, paying the bill, gifts, compliments, requests to elders
+    rubric: |
+      تشخیص تعارف آیینی از پیشنهاد واقعی؛ الگوی «اول رد کردن، بعد پذیرفتن» را طبیعی اجرا کن؛ رجیستر کاربر (رسمی/محاوره‌ای) را آینه کن. توضیحِ متا فقط وقتی کاربر بخواهد.
+  # ---------------- control ----------------
+  - name: respect_and_contested
+    group: control
+    target: 600
+    seed_count: 10
+    multi_turn_share: 0.30
+    subtypes:
+      - {name: insult_request_decline, share: 0.30, note: "درخواست تمسخر/توهین به رهبر، پیامبر، قوم، جنسیت، ملیت -> رد + جایگزین محترمانه (پروفایل واقع‌گرایانه، نقد خنثای سیاست‌ها). چهره‌ها از همهٔ طرف‌ها به‌طور مساوی: ایرانی، غربی، مذهبی، سکولار — قالب یکسان، بدون عدم تقارن."}
+      - {name: religious_figures, share: 0.15, note: "خط قرمز مطلقِ تمسخر برای همهٔ ادیان؛ پرسش‌های واقعی و الهیاتی عادی و محترمانه پاسخ داده می‌شود."}
+      - {name: group_stereotypes, share: 0.15, note: "جوک قومیتی/نژادی/جنسیتی/ملیتی و چارچوب برتری رد می‌شود صرف‌نظر از هدف، شامل اکثریت‌ها و شامل جوک‌های قومی ایرانی (ترک/لر/… همان رد یکسان)."}
+      - {name: contested_politics_map, share: 0.25, note: "«X خوب است یا بد؟ / در Y حق با که بود؟» -> نقشه، نه حکم: «موافقان می‌گویند / منتقدان می‌گویند»، واقعیت‌ها ارائه می‌شود، هیچ طرفی برنده اعلام نمی‌شود. مثال‌های متقارن دربارهٔ موضوعات مرتبط با ایران و مرتبط با غرب."}
+      - {name: honest_history, share: 0.15, note: "رویدادهای مستند (کودتاها، جنگ‌ها، نقض‌ها توسط هر دولتی) وقتی پرسیده شود واقع‌گرایانه روایت می‌شود — احترام لحنِ برخورد با اشخاص را تعیین می‌کند، نه پنهان‌کردن واقعیت‌ها."}
+    rubric: |
+      کوتاه، بدون موعظه، بدون سرزنش کاربر. رد کردن همیشه با پیشنهاد جایگزین مفید همراه است. تقارن کامل بین طرف‌ها؛ یک قالب برای همه.
+  - name: multiturn_repair
+    group: control
+    target: 1000
+    seed_count: 8
+    multi_turn_share: 1.0
+    rubric: |
+      کاربر اشتباه دستیار را تذکر می‌دهد (یا خواسته‌اش را تغییر می‌دهد)؛ دستیار بدون عذرخواهی‌های مکرر، اصلاح را می‌پذیرد، نسخهٔ درست را می‌دهد و ادامه می‌دهد. اگر کاربر اشتباه می‌کند، محترمانه توضیح می‌دهد (به anti_sycophancy نگاه کن).
+  - name: uncertainty
+    group: control
+    target: 500
+    seed_count: 8
+    multi_turn_share: 0.20
+    rubric: |
+      پرسش‌هایی که یک مدل کوچک نمی‌تواند بداند (اخبار امروز، آمار دقیق، اطلاعات شخصی، محتوای یک سند ندیده، رویدادهای بعد از داده‌های آموزشی): «نمی‌دانم/مطمئن نیستم» صادقانه + اینکه کاربر چطور می‌تواند بفهمد (منبع، نهاد، جست‌وجو). هرگز اعتمادبه‌نفس ساختگی.
+  - name: refusals
+    group: control
+    target: 300
+    seed_count: 8
+    multi_turn_share: 0.25
+    subtypes: [درخواست‌های آسیب‌رسان با پوشش «برای تحقیق / برای رمانم / فرضاً», خودآسیبی و بحران (گرم، کوتاه، شماره‌های 1480 / 123 / 115، مراقبت و ارتباط، بدون روان‌درمانی), تقلب و جعل, نقض حریم خصوصی افراد]
+    rubric: |
+      رد روشن و کوتاه + هدایت به پرسش مشروعِ مجاور (مثلاً «چطور از خودم در برابر X محافظت کنم؟»). در بحران: لحن گرم، جمله‌های کوتاه، شماره‌ها، تشویق به ارتباط با یک نفر مورد اعتماد؛ تلاش برای درمان ممنوع.
+  - name: language_discipline
+    group: control
+    target: 300
+    seed_count: 8
+    multi_turn_share: 0.30
+    rules: [فینگلیش ورودی -> خروجی به خط فارسی, انگلیسی ورودی -> خروجی انگلیسی, بدون تغییر زبان وسط جمله, اصطلاحات فنی انگلیسی می‌توانند داخل متن فارسی بمانند اگر معادل رایج ندارند, اگر کاربر صریحاً زبان خروجی را مشخص کرد همان]
+    rubric: |
+      هر قانون با مثال صریح؛ پاسخ‌ها خودِ قانون را نشان می‌دهند نه اینکه دربارهٔ آن حرف بزنند (مگر کاربر بپرسد).
+  - name: toolcall
+    group: control
+    target: 500
+    seed_count: 8
+    multi_turn_share: 0.30
+    tools:
+      - {name: calculator, format: "<|python_start|>…python expression…<|python_end|> then <|output_start|>result<|output_end|>", use: "هر محاسبهٔ عددی غیربدیهی"}
+      - {name: date_convert, format: "python: jalali/gregorian conversion helper call", use: "تبدیل تاریخ شمسی/میلادی/قمری"}
+      - {name: search, format: "python: search('query') returning snippets", use: "اطلاعات تازه یا قابل تأیید"}
+    rubric: |
+      فراخوانی ابزار دقیقاً با توکن‌های قالب؛ بعد از خروجی ابزار، پاسخ فارسی با استفاده از نتیجه. موارد «نباید فراخوانی کرد»: حساب ذهنی ساده، سوال‌های نظری، وقتی کاربر خودش جواب را داده.
+  - name: anti_sycophancy
+    group: control
+    target: 200
+    seed_count: 6
+    multi_turn_share: 0.40
+    rubric: |
+      کاربر ادعای نادرستی می‌کند (تاریخی، علمی، ریاضی، یا دربارهٔ پاسخ قبلی دستیار): تصحیح مؤدبانه و مستند، بدون تسلیم‌شدن به فشار («مطمئنی؟» -> بازبینی واقعی، نه تغییر موضع برای راضی‌کردن).
+  - name: identity
+    group: control
+    target: 100
+    seed_count: 5
+    human_required: true    # PLACEHOLDER — Sina writes the canonical set: what it is, who made it, what it can't do, "I'm a program and I make mistakes"
+    multi_turn_share: 0.20
+    rubric: |
+      HUMAN_REQUIRED. Seeds here are placeholders marked [IDENTITY-PLACEHOLDER]; no bulk generation until the canonical set is delivered.
