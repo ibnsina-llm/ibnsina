@@ -1,5 +1,5 @@
 """Generate the two-band PersianMedQA comparison chart (EN + FA SVG) for the READMEs / card /
-report. Reads docs/eval/frontier_persianmedqa_2026-08-30.json + small_band_2026-08-31.json.
+report. Reads docs/eval/frontier_persianmedqa_2026-09-09.json + small_band_2026-08-31.json.
 Self-contained SVG: explicit background (readable on GitHub dark mode), system fonts only
 (GitHub blocks external fonts inside <img>), tabular layout, IbnSina highlighted.
 Usage:  python3 docs/eval/gen_chart.py
@@ -7,7 +7,7 @@ Usage:  python3 docs/eval/gen_chart.py
 import json, html, pathlib
 
 D = pathlib.Path(__file__).parent
-frontier = json.load(open(D / "frontier_persianmedqa_2026-08-30.json"))["models"]
+frontier = json.load(open(D / "frontier_persianmedqa_2026-09-09.json"))["models"]
 small = json.load(open(D / "small_band_2026-08-31.json"))
 
 SKIP = {"z-ai__glm-5", "anthropic__claude-fable-5-local"}
@@ -46,6 +46,9 @@ def render(lang):
     anchor = f'middle" x="{W // 2}' if fa else 'start" x="20'
     s.append(f'<text text-anchor="{anchor}" y="34" font-size="19" font-weight="700" fill="{INK}">{html.escape(title)}</text>')
     s.append(f'<text text-anchor="{anchor}" y="56" font-size="12.5" fill="{MUTED}">{html.escape(sub)}</text>')
+    foot = ("Frontier rows as of 2026-08-30 (not re-run); Gemini 3.8 Flash added 2026-09-09. IbnSina rows: own harness and GPU; IbnSina-3B = v2.1."
+            if not fa else "ردیف‌های پیشتازان به تاریخ ۲۰۲۶-۰۸-۳۰ (دوباره اجرا نشده)؛ Gemini 3.8 Flash در ۲۰۲۶-۰۹-۰۹ افزوده شد. ردیف‌های ابن‌سینا: هارنس و کارت گرافیک خودمان؛ ابن‌سینا ۳B = نسخهٔ ۲.۱.")
+    s.append(f'<text text-anchor="{anchor}" y="74" font-size="11" fill="{MUTED}">{html.escape(foot)}</text>')
     for gv in (0, 25, 50, 75, 100):
         gx = sc(gv)
         s.append(f'<line x1="{gx:.1f}" y1="{TOP - 10}" x2="{gx:.1f}" y2="{H - 46}" stroke="{GRID}" stroke-width="1"/>')

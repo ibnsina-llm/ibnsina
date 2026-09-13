@@ -31,15 +31,15 @@ The 2-minute path on any OS is [ollama](https://ollama.com):
 
 **macOS** — install [Ollama for Mac](https://ollama.com/download/mac) (or `brew install ollama`), then in Terminal:
 ```bash
-ollama run hf.co/ibnsina-llm/ibnsina-1.5b
+ollama run hf.co/ibnsina-llm/ibnsina-1.5b   # or the larger 3B: ollama run ibnsina/ibnsina-3b
 ```
 **Windows** — install [Ollama for Windows](https://ollama.com/download/windows), then in PowerShell:
 ```powershell
-ollama run hf.co/ibnsina-llm/ibnsina-1.5b
+ollama run hf.co/ibnsina-llm/ibnsina-1.5b   # or the larger 3B: ollama run ibnsina/ibnsina-3b
 ```
 **Linux** — `curl -fsSL https://ollama.com/install.sh | sh`, then:
 ```bash
-ollama run hf.co/ibnsina-llm/ibnsina-1.5b
+ollama run hf.co/ibnsina-llm/ibnsina-1.5b   # or the larger 3B: ollama run ibnsina/ibnsina-3b
 ```
 That's it — the chat template ships inside the GGUF. Prefer a GUI? [LM Studio](https://lmstudio.ai) (Mac/Windows/Linux): search **ibnsina-llm/ibnsina-1.5b** and click download. Using llama.cpp directly? Grab a GGUF from [the HF repo](https://huggingface.co/ibnsina-llm/ibnsina-1.5b) and:
 ```bash
@@ -94,7 +94,7 @@ Natural, register-matching Persian; honest uncertainty («نمی‌دانم») i
 ## Benchmarks and technical report — coming
 
 
-A technical report is forthcoming: IbnSina evaluated alongside the 2026 frontier (Claude Opus 5, GPT-5.6, Gemini, Kimi K3, GLM, DeepSeek, Qwen) on Persian exam benchmarks such as [PersianMedQA](https://arxiv.org/abs/2506.00250) — the first such comparison for this model generation. *[link placeholder]* The report will also describe the corpus, tokenizer, training and SFT recipe in full, with a comparison chart against other Persian and multilingual models.
+A family technical report (IbnSina-1.5B / 3B / 30B: recipe, data, scaling, evaluation alongside the 2026 frontier on Persian exam benchmarks such as [PersianMedQA](https://arxiv.org/abs/2506.00250)) is coming after the 30B release later this month.
 
 ## Limitations
 
