@@ -2,7 +2,7 @@
 
 Sina Meraji · ORCID 0009-0002-8028-1932 · github.com/sinameraji
 
-[![License: Apache 2.0](https://img.shields.io/badge/license-Apache--2.0-blue)](https://www.apache.org/licenses/LICENSE-2.0) [![Hugging Face](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-ibnsina--1.5b-ffc107)](https://huggingface.co/ibnsina-llm/ibnsina-1.5b) [![Ollama](https://img.shields.io/badge/Ollama-ibnsina%2Fibnsina--1.5b-222222)](https://ollama.com/ibnsina/ibnsina-1.5b) [![GGUF](https://img.shields.io/badge/format-GGUF-8A2BE2)](https://huggingface.co/ibnsina-llm/ibnsina-1.5b/tree/main) ![Persian-first](https://img.shields.io/badge/language-%D9%81%D8%A7%D8%B1%D8%B3%DB%8C-0f8b93) [![Dataset](https://img.shields.io/badge/%F0%9F%A4%97%20Dataset-synthetic--persian--v1-ffc107)](https://huggingface.co/datasets/ibnsina-llm/synthetic-persian-v1)
+[![License: Apache 2.0](https://img.shields.io/badge/license-Apache--2.0-blue)](https://www.apache.org/licenses/LICENSE-2.0) [![Hugging Face](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-ibnsina--1.5b-ffc107)](https://huggingface.co/ibnsina-llm/ibnsina-1.5b) [![Hugging Face](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-ibnsina--30b--chat-ffc107)](https://huggingface.co/ibnsina-llm/ibnsina-30b-chat) [![Ollama](https://img.shields.io/badge/Ollama-ibnsina%2Fibnsina--1.5b-222222)](https://ollama.com/ibnsina/ibnsina-1.5b) [![GGUF](https://img.shields.io/badge/format-GGUF-8A2BE2)](https://huggingface.co/ibnsina-llm/ibnsina-1.5b/tree/main) ![Persian-first](https://img.shields.io/badge/language-%D9%81%D8%A7%D8%B1%D8%B3%DB%8C-0f8b93) [![Dataset](https://img.shields.io/badge/%F0%9F%A4%97%20Dataset-synthetic--persian--v1-ffc107)](https://huggingface.co/datasets/ibnsina-llm/synthetic-persian-v1)
 
 **[فارسی: README_FA.md](README_FA.md)**
 
@@ -11,7 +11,7 @@ Sina Meraji · ORCID 0009-0002-8028-1932 · github.com/sinameraji
 >
 > **ابن‌سینا یک مدل کوچک است برای نوشتن، خلاصه، ترجمه و گفت‌وگو به فارسی — نه منبع اطلاعات درباره‌ی افراد، سیاست یا اخبار.** برای مشاوره، پاسخ به سؤال‌های دانشی، حل ریاضی یا نوشتن کد ساخته نشده است؛ برای آن کارها از مدل‌های بزرگ استفاده کنید. کارش تولید متن فارسی، آفلاین و روی دستگاه خودتان است — و ممکن است جمله‌های روان اما نادرست بسازد؛ هر چیز مهم را خودتان راستی‌آزمایی کنید.
 
-**The first open-source Persian LLM at modern scale pretrained from scratch.** Most Persian models adapt an English-first base (Llama, Mistral); this one never knew English first.
+**The first open-source Persian LLM at modern scale pretrained from scratch.** Most Persian models adapt an English-first base (Llama, Mistral); this one never knew English first. The 1.5B and 3B are trained from scratch this way. The largest member takes the other route: **IbnSina-30B** continues pretraining Qwen3-30B-A3B-Base on 6 B Persian tokens, and **IbnSina-30B-Chat** is that model fine-tuned for conversation.
 
 ![PersianMedQA: IbnSina alongside the 2026 frontier and today's small models — identical protocol for every row](docs/eval/persianmedqa_chart_en.svg)
 
@@ -22,7 +22,10 @@ IbnSina is a family of open-weight Persian-first large language models trained f
 
 | model | params | context | data | status | download |
 |---|---:|---:|---|---|---|
-| `ibnsina-1.5b` (base + chat) | 1.48 B | 2048 | 46 B tokens (`train_v1_1_open`) + `sft_v2` | released (Aug 2026) | [huggingface.co/ibnsina-llm/ibnsina-1.5b](https://huggingface.co/ibnsina-llm/ibnsina-1.5b) |
+| `ibnsina-1.5b` (base + chat) | 1.48 B | 2048 | 36.7 B tokens of `train_v1_1_open` + `sft_v2` | released (Aug 2026) | [huggingface.co/ibnsina-llm/ibnsina-1.5b](https://huggingface.co/ibnsina-llm/ibnsina-1.5b) |
+| `ibnsina-3b` (chat) | 3.0 B | 2048 | 99.6 B tokens from scratch + `sft_v2.1` | released (Sept 2026) | [huggingface.co/ibnsina-llm/ibnsina-3b](https://huggingface.co/ibnsina-llm/ibnsina-3b) · [ollama](https://ollama.com/ibnsina/ibnsina-3b) |
+| `ibnsina-30b` (base) | 30.5 B total, 3.3 B active (MoE) | 4096 | Qwen3-30B-A3B-Base + 6.0 B Persian tokens (continued pretraining) | released (Sept 2026); completes text, does not chat | [huggingface.co/ibnsina-llm/ibnsina-30b](https://huggingface.co/ibnsina-llm/ibnsina-30b) |
+| `ibnsina-30b-chat` | 30.5 B total, 3.3 B active (MoE) | 4096 | `ibnsina-30b` + 13 k rows of `sft_v2.1` | released (Sept 2026) | [huggingface.co/ibnsina-llm/ibnsina-30b-chat](https://huggingface.co/ibnsina-llm/ibnsina-30b-chat) · [ollama](https://ollama.com/ibnsina/ibnsina-30b-chat) |
 | `ibnsina-pilot-360m` | 0.36 B | 2048 | 7.9 B tokens | research pilot, nanochat-native (no GGUF) | GCS bundle, on request |
 
 ## Run it
@@ -32,14 +35,17 @@ The 2-minute path on any OS is [ollama](https://ollama.com):
 **macOS** — install [Ollama for Mac](https://ollama.com/download/mac) (or `brew install ollama`), then in Terminal:
 ```bash
 ollama run hf.co/ibnsina-llm/ibnsina-1.5b   # or the larger 3B: ollama run ibnsina/ibnsina-3b
+ollama run ibnsina/ibnsina-30b-chat          # the 30B flagship: 18.6 GB download, for a 32 GB machine or a 24 GB GPU
 ```
 **Windows** — install [Ollama for Windows](https://ollama.com/download/windows), then in PowerShell:
 ```powershell
 ollama run hf.co/ibnsina-llm/ibnsina-1.5b   # or the larger 3B: ollama run ibnsina/ibnsina-3b
+ollama run ibnsina/ibnsina-30b-chat          # the 30B flagship: 18.6 GB download, for a 32 GB machine or a 24 GB GPU
 ```
 **Linux** — `curl -fsSL https://ollama.com/install.sh | sh`, then:
 ```bash
 ollama run hf.co/ibnsina-llm/ibnsina-1.5b   # or the larger 3B: ollama run ibnsina/ibnsina-3b
+ollama run ibnsina/ibnsina-30b-chat          # the 30B flagship: 18.6 GB download, for a 32 GB machine or a 24 GB GPU
 ```
 That's it — the chat template ships inside the GGUF. Prefer a GUI? [LM Studio](https://lmstudio.ai) (Mac/Windows/Linux): search **ibnsina-llm/ibnsina-1.5b** and click download. Using llama.cpp directly? Grab a GGUF from [the HF repo](https://huggingface.co/ibnsina-llm/ibnsina-1.5b) and:
 ```bash
@@ -94,11 +100,11 @@ Natural, register-matching Persian; honest uncertainty («نمی‌دانم») i
 ## Benchmarks and technical report — coming
 
 
-A family technical report (IbnSina-1.5B / 3B / 30B: recipe, data, scaling, evaluation alongside the 2026 frontier on Persian exam benchmarks such as [PersianMedQA](https://arxiv.org/abs/2506.00250)) is coming after the 30B release later this month.
+A family technical report (IbnSina-1.5B / 3B / 30B: recipe, data, scaling, evaluation alongside the 2026 frontier on Persian exam benchmarks such as [PersianMedQA](https://arxiv.org/abs/2506.00250)) is being finalised now that the 30B models have shipped. Until then, each model's scores are on its Hugging Face card.
 
 ## Limitations
 
-A 1.5 B model trained on 46 B tokens: fluent Persian, weak on precise facts, no memory between conversations, English is a second language. No built-in internet access: it can emit calculator, date-conversion and search *tool calls* in nanochat's format, which work only in a host that executes them — the reference chat runtime in this repo does; llama.cpp and ollama do not. Do not rely on it for medical, legal or financial decisions. Evaluation is early-stage (ParsiNLU). It fabricates confident but false details about real people; do not use it as a source on individuals or current events.
+IbnSina-1.5B, a 1.5 B model trained on 36.7 B tokens: fluent Persian, weak on precise facts, no memory between conversations, English is a second language. No built-in internet access: it can emit calculator, date-conversion and search *tool calls* in nanochat's format, which work only in a host that executes them — the reference chat runtime in this repo does; llama.cpp and ollama do not. Do not rely on it for medical, legal or financial decisions. Evaluation is early-stage (ParsiNLU). It fabricates confident but false details about real people; do not use it as a source on individuals or current events.
 
 ## Acknowledgments
 

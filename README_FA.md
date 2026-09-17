@@ -2,7 +2,7 @@
 
 سینا معراجی · ORCID 0009-0002-8028-1932 · github.com/sinameraji
 
-[![License: Apache 2.0](https://img.shields.io/badge/license-Apache--2.0-blue)](https://www.apache.org/licenses/LICENSE-2.0) [![Hugging Face](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-ibnsina--1.5b-ffc107)](https://huggingface.co/ibnsina-llm/ibnsina-1.5b) [![Ollama](https://img.shields.io/badge/Ollama-ibnsina%2Fibnsina--1.5b-222222)](https://ollama.com/ibnsina/ibnsina-1.5b) [![GGUF](https://img.shields.io/badge/format-GGUF-8A2BE2)](https://huggingface.co/ibnsina-llm/ibnsina-1.5b/tree/main) ![Persian-first](https://img.shields.io/badge/language-%D9%81%D8%A7%D8%B1%D8%B3%DB%8C-0f8b93) [![Dataset](https://img.shields.io/badge/%F0%9F%A4%97%20Dataset-synthetic--persian--v1-ffc107)](https://huggingface.co/datasets/ibnsina-llm/synthetic-persian-v1)
+[![License: Apache 2.0](https://img.shields.io/badge/license-Apache--2.0-blue)](https://www.apache.org/licenses/LICENSE-2.0) [![Hugging Face](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-ibnsina--1.5b-ffc107)](https://huggingface.co/ibnsina-llm/ibnsina-1.5b) [![Hugging Face](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-ibnsina--30b--chat-ffc107)](https://huggingface.co/ibnsina-llm/ibnsina-30b-chat) [![Ollama](https://img.shields.io/badge/Ollama-ibnsina%2Fibnsina--1.5b-222222)](https://ollama.com/ibnsina/ibnsina-1.5b) [![GGUF](https://img.shields.io/badge/format-GGUF-8A2BE2)](https://huggingface.co/ibnsina-llm/ibnsina-1.5b/tree/main) ![Persian-first](https://img.shields.io/badge/language-%D9%81%D8%A7%D8%B1%D8%B3%DB%8C-0f8b93) [![Dataset](https://img.shields.io/badge/%F0%9F%A4%97%20Dataset-synthetic--persian--v1-ffc107)](https://huggingface.co/datasets/ibnsina-llm/synthetic-persian-v1)
 
 **[English: README.md](README.md)**
 
@@ -11,7 +11,7 @@
 >
 > **IbnSina is a small model for writing, summarizing, translating and conversing in Persian — not a source of facts about people, politics, or news.** It is not built for advice, knowledge questions, math, or code — use a large model for those. What it is for: offline Persian text generation on your own device. It can produce fluent but wrong sentences — verify anything that matters.
 
-**ابن‌سینا اولین مدل زبانی متن‌باز فارسی در این مقیاس است که از صفر و با محوریت فارسی آموزش دیده.** مدل‌های فارسی تا امروز تقریباً همیشه روی یک مدل انگلیسیِ آماده (Llama، Mistral و مانند این‌ها) ساخته شده‌اند و فارسی را بعداً، مثل زبان دوم، یاد گرفته‌اند. ابن‌سینا از روز اول با فارسی بزرگ شده است. نامش را هم از ابوعلی سینا گرفته.
+**ابن‌سینا اولین مدل زبانی متن‌باز فارسی در این مقیاس است که از صفر و با محوریت فارسی آموزش دیده.** مدل‌های فارسی تا امروز تقریباً همیشه روی یک مدل انگلیسیِ آماده (Llama، Mistral و مانند این‌ها) ساخته شده‌اند و فارسی را بعداً، مثل زبان دوم، یاد گرفته‌اند. ابن‌سینا از روز اول با فارسی بزرگ شده است. نامش را هم از ابوعلی سینا گرفته. مدل‌های ۱٫۵B و ۳B به همین روش از صفر آموزش دیده‌اند. بزرگ‌ترین عضو خانواده راه دیگری رفته است: **ابن‌سینا ۳۰B** پیش‌آموزشِ Qwen3-30B-A3B-Base را با ۶ میلیارد توکن فارسی ادامه می‌دهد، و **ابن‌سینا ۳۰B گفت‌وگو** همان مدل است که برای گفت‌وگو تنظیم دقیق شده.
 
 ![PersianMedQA: ابن‌سینا در کنار مدل‌های پیشتاز ۲۰۲۶ و مدل‌های کوچک امروز — با پروتکل یکسان برای همهٔ ردیف‌ها](docs/eval/persianmedqa_chart_fa.svg)
 
@@ -20,7 +20,10 @@
 
 | مدل | پارامتر | بافتار | داده | وضعیت | دانلود |
 |---|---:|---:|---|---|---|
-| `ibnsina-1.5b` (پایه + گفت‌وگو) | ۱٫۴۸ میلیارد | ۲۰۴۸ | ۴۶ میلیارد توکن (`train_v1_1_open`) + `sft_v2` | منتشرشده (شهریور ۱۴۰۵) | [huggingface.co/ibnsina-llm/ibnsina-1.5b](https://huggingface.co/ibnsina-llm/ibnsina-1.5b) |
+| `ibnsina-1.5b` (پایه + گفت‌وگو) | ۱٫۴۸ میلیارد | ۲۰۴۸ | ۳۶٫۷ میلیارد توکن از `train_v1_1_open` + `sft_v2` | منتشرشده (شهریور ۱۴۰۵) | [huggingface.co/ibnsina-llm/ibnsina-1.5b](https://huggingface.co/ibnsina-llm/ibnsina-1.5b) |
+| `ibnsina-3b` (گفت‌وگو) | ۳٫۰ میلیارد | ۲۰۴۸ | ۹۹٫۶ میلیارد توکن از صفر + `sft_v2.1` | منتشرشده (شهریور ۱۴۰۵) | [huggingface.co/ibnsina-llm/ibnsina-3b](https://huggingface.co/ibnsina-llm/ibnsina-3b) · [ollama](https://ollama.com/ibnsina/ibnsina-3b) |
+| `ibnsina-30b` (پایه) | ۳۰٫۵ میلیارد کل، ۳٫۳ میلیارد فعال (MoE) | ۴۰۹۶ | Qwen3-30B-A3B-Base + ۶٫۰ میلیارد توکن فارسی (ادامهٔ پیش‌آموزش) | منتشرشده (شهریور ۱۴۰۵)؛ فقط متن را ادامه می‌دهد و گفت‌وگو نمی‌کند | [huggingface.co/ibnsina-llm/ibnsina-30b](https://huggingface.co/ibnsina-llm/ibnsina-30b) |
+| `ibnsina-30b-chat` | ۳۰٫۵ میلیارد کل، ۳٫۳ میلیارد فعال (MoE) | ۴۰۹۶ | `ibnsina-30b` + ۱۳ هزار ردیف از `sft_v2.1` | منتشرشده (شهریور ۱۴۰۵) | [huggingface.co/ibnsina-llm/ibnsina-30b-chat](https://huggingface.co/ibnsina-llm/ibnsina-30b-chat) · [ollama](https://ollama.com/ibnsina/ibnsina-30b-chat) |
 | `ibnsina-pilot-360m` | ۰٫۳۶ میلیارد | ۲۰۴۸ | ۷٫۹ میلیارد توکن | پایلوت پژوهشی، بومیِ nanochat (بدون GGUF) | در صورت درخواست |
 
 ## اجرای مدل
@@ -30,6 +33,7 @@
 **مک** — [Ollama برای مک](https://ollama.com/download/mac) را نصب کنید (یا `brew install ollama`)، بعد در ترمینال:
 ```bash
 ollama run hf.co/ibnsina-llm/ibnsina-1.5b   # یا مدل بزرگ‌تر ۳B: ollama run ibnsina/ibnsina-3b
+ollama run ibnsina/ibnsina-30b-chat          # مدل ۳۰B: دانلود ۱۸٫۶ گیگابایت، برای سیستمی با ۳۲ گیگابایت حافظه یا کارت گرافیک ۲۴ گیگابایتی
 ```
 **ویندوز** — [Ollama برای ویندوز](https://ollama.com/download/windows) را نصب کنید، بعد در PowerShell همان دستور بالا را بزنید.
 
@@ -85,11 +89,11 @@ llama-cli -m ibnsina-1.5b-Q4_K_M.gguf
 ## ارزیابی و گزارش فنی
 
 
-گزارش فنی خانوادهٔ ابن‌سینا (۱٫۵B / 3B / 30B: دستور ساخت، داده، مقیاس‌پذیری، و مقایسه با مدل‌های پیشتاز ۲۰۲۶ روی آزمون‌های فارسی مثل [PersianMedQA](https://arxiv.org/abs/2506.00250)) پس از انتشار مدل ۳۰B در همین ماه منتشر می‌شود.
+گزارش فنی خانوادهٔ ابن‌سینا (۱٫۵B / 3B / 30B: دستور ساخت، داده، مقیاس‌پذیری، و مقایسه با مدل‌های پیشتاز ۲۰۲۶ روی آزمون‌های فارسی مثل [PersianMedQA](https://arxiv.org/abs/2506.00250)) اکنون که مدل‌های ۳۰B منتشر شده‌اند، در حال نهایی‌شدن است. تا آن زمان، نتایج هر مدل روی کارت Hugging Face همان مدل آمده است.
 
 ## محدودیت‌ها
 
-ابن‌سینا مدلی ۱٫۵ میلیارد پارامتری است که ۴۶ میلیارد توکن دیده — این را باید جدی گرفت. فارسی‌اش روان است، اما روی جزئیات واقعی (تاریخ‌ها، آمارها، اسم‌ها) لغزش دارد؛ بین گفت‌وگوها حافظه‌ای ندارد و انگلیسی زبان دومش است. به اینترنت هم وصل نیست. می‌تواند فراخوانی ابزار (ماشین‌حساب، تبدیل تاریخ، جست‌وجو) را در قالب nanochat تولید کند، ولی این فراخوانی‌ها فقط وقتی کار می‌کنند که میزبان اجرایشان کند — سرور مرجعِ همین مخزن این کار را می‌کند؛ llama.cpp و ollama نه. برای تصمیم‌های پزشکی، حقوقی یا مالی به آن تکیه نکنید. ارزیابی‌ها هم هنوز اول راه‌اند (ParsiNLU). دربارهٔ افراد واقعی جزئیات نادرست اما با‌اطمینان می‌سازد؛ به‌عنوان منبع دربارهٔ اشخاص یا رویدادهای روز به آن تکیه نکنید.
+ابن‌سینا ۱٫۵B مدلی ۱٫۵ میلیارد پارامتری است که ۳۶٫۷ میلیارد توکن دیده — این را باید جدی گرفت. فارسی‌اش روان است، اما روی جزئیات واقعی (تاریخ‌ها، آمارها، اسم‌ها) لغزش دارد؛ بین گفت‌وگوها حافظه‌ای ندارد و انگلیسی زبان دومش است. به اینترنت هم وصل نیست. می‌تواند فراخوانی ابزار (ماشین‌حساب، تبدیل تاریخ، جست‌وجو) را در قالب nanochat تولید کند، ولی این فراخوانی‌ها فقط وقتی کار می‌کنند که میزبان اجرایشان کند — سرور مرجعِ همین مخزن این کار را می‌کند؛ llama.cpp و ollama نه. برای تصمیم‌های پزشکی، حقوقی یا مالی به آن تکیه نکنید. ارزیابی‌ها هم هنوز اول راه‌اند (ParsiNLU). دربارهٔ افراد واقعی جزئیات نادرست اما با‌اطمینان می‌سازد؛ به‌عنوان منبع دربارهٔ اشخاص یا رویدادهای روز به آن تکیه نکنید.
 
 ## مجوز و استناد
 
